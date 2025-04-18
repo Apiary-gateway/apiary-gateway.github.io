@@ -1,7 +1,69 @@
 ---
+import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+const headings = [
+  {
+    id: "introduction",
+    title: "Introduction",
+    img: "/images/intro.png",
+  },
+  {
+    id: "background",
+    title: "Background",
+    img: "/images/background.png",
+    children: [
+      { id: "general-problem-domain", title: "General Problem Domain", img: "/images/general-problem.png" },
+      { id: "caching", title: "Caching" },
+      { id: "change-data-capture", title: "Change Data Capture", img: "/images/cdc.png" },
+    ],
+  },
+  {
+    id: "implementation",
+    title: "Implementation",
+    img: "/images/implementation.png",
+    children: [
+      { id: "debezium", title: "Debezium", img: "/images/debezium.png" },
+      { id: "kafka", title: "Apache Kafka" },
+      { id: "postgresql", title: "PostgreSQL", img: "/images/postgres.png" },
+    ],
+  },
+  {
+    id: "challenges",
+    title: "Challenges",
+    img: "/images/challenges.png",
+    children: [
+      { id: "event-transformation", title: "Event Transformation" },
+      { id: "schema-evolution", title: "Schema Evolution", img: "/images/schema-evolution.png" },
+    ],
+  },
+];
+
+// Dynamically import all .md components
+const sectionComponents = Object.fromEntries(
+  await Promise.all(
+    headings.map(async ({ id }) => {
+      const module = await import(`./case-study-sections/${id}.md`);
+      return [id, module.default];
+    })
+  )
+);
+
+// Helper: Build child image map
+function extractChildImages(children = []) {
+  return Object.fromEntries(
+    children
+      .filter((child) => child.img)
+      .map((child) => [child.id, child.img])
+  );
+}
 ---
 
 <BaseLayout>
-  <h1>Case Study</h1>
+  <SidebarScrollLayout headings={headings}>
+    {headings.map(({ id, img, children }) => {
+      const Component = sectionComponents[id];
+      const childImages = extractChildImages(children);
+      return <Component img={img} childImages={childImages} />;
+    })}
+  </SidebarScrollLayout>
 </BaseLayout>

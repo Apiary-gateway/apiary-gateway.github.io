@@ -1,0 +1,149 @@
+---
+const { children, headings } = Astro.props;
+---
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav>
+      <ul class="toc-list">
+        {headings.map((item) => (
+          <li>
+            <a href={`#${item.id}`} class="toc-link" id={`link-${item.id}`}>
+              {item.title}
+            </a>
+            {item.children && (
+              <ul class="toc-sublist">
+                {item.children.map((child) => (
+                  <li>
+                    <a href={`#${child.id}`} class="toc-link" id={`link-${child.id}`}>
+                      {child.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="content">
+    {children}
+  </main>
+</div>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const link = document.querySelector(`#link-${entry.target.id}`);
+        if (entry.isIntersecting) {
+          document.querySelectorAll(".toc-link").forEach((el) =>
+            el.classList.remove("active")
+          );
+          link?.classList.add("active");
+        }
+      });
+    },
+    { 
+      threshold: 0.4,
+      rootMargin: "-20% 0px -80% 0px" // Adjusts the active section detection area
+    }
+  );
+
+  document.querySelectorAll("section[id]").forEach((section) => {
+    observer.observe(section);
+  });
+
+  // Add click handler for smooth scrolling
+  document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+<style>
+.layout {
+  display: flex;
+  background-color: #111;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.sidebar {
+  min-width: 250px;
+  width: 20%;
+  height: 100vh;
+  flex-basis: 250px;
+  position: sticky;
+  top: 0;
+  padding: 2rem 0;
+  overflow-y: auto;
+  border-right: 1px solid #2c2c2c;
+}
+
+.sidebar nav {
+  background-color: inherit;
+  padding: 0 1.5rem;
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.toc-list,
+.toc-sublist {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.25rem;
+}
+
+.toc-sublist {
+  margin-left: 1rem;
+  padding-left: 1rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.5rem;
+  color: #aaa;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+}
+
+.toc-link.active {
+  color: #fff;
+  font-weight: bold;
+  border-left: 2px solid #10b981;
+  padding-left: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    width: 100%;
+  }
+}
+</style>
