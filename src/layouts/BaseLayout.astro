@@ -15,7 +15,16 @@ import '../styles/global.css';
   </head>
   <body>
     <Navbar />
-    <slot />
+    <main class="main-content">
+      <slot />
+    </main>
     <Footer />
   </body>
 </html>
+
+<style>
+  .main-content {
+    padding-top: 5rem; /* Account for fixed navbar height */
+    min-height: calc(100vh - 5rem - 10rem); /* Viewport height minus navbar and footer */
+  }
+</style>
