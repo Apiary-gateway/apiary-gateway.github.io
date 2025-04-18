@@ -1,32 +1,41 @@
 ---
-import "../styles/global.css";
-import Hero from "../components/Hero.astro";
-import Footer from "../components/Footer.astro";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Willow CDC</title>
-  </head>
-  <body>
-    <Hero />
+<BaseLayout>
+  <Hero />
 
-    <main>
+  <main class="container">
+    <section class="about-section">
       <h2>About Willow CDC</h2>
       <p>
-        Willow Community Development Corporation is dedicated to improving the quality of life in our neighborhoods...
+        Willow Community Development Corporation is dedicated to improving the quality of life in our neighborhoods through sustainable development, community engagement, and economic empowerment.
       </p>
+    </section>
 
-      <h3>Projects</h3>
-      <ul>
-        <li><a href="#">Affordable Housing</a></li>
-        <li><a href="#">Youth Programs</a></li>
-        <li><a href="#">Local Events</a></li>
-      </ul>
-    </main>
+    <section class="projects-section">
+      <h3>Our Projects</h3>
+      <div class="project-grid">
+        <div class="project-card">
+          <h4>Affordable Housing</h4>
+          <p>Creating sustainable and affordable housing solutions for our community members.</p>
+        </div>
+        <div class="project-card">
+          <h4>Youth Programs</h4>
+          <p>Empowering the next generation through education and mentorship programs.</p>
+        </div>
+        <div class="project-card">
+          <h4>Community Events</h4>
+          <p>Bringing the community together through cultural and educational events.</p>
+        </div>
+      </div>
+    </section>
 
-    <Footer />
-  </body>
-</html>
+    <section class="contact-section">
+      <h3>Get Involved</h3>
+      <p>Join us in making a difference in our community. Contact us to learn more about our programs and how you can contribute.</p>
+      <a href="/contact" class="cta-button">Contact Us</a>
+    </section>
+  </main>
+</BaseLayout>
