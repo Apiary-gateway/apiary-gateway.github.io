@@ -254,7 +254,6 @@ const organizationURL = 'https://github.com/Sporkway';
 
   const setTheme = (theme) => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
     updateThemeIcons(theme);
     updateThemeColors(theme);
   };
@@ -286,8 +285,13 @@ const organizationURL = 'https://github.com/Sporkway';
     setTheme(current === 'dark' ? 'light' : 'dark');
   };
 
-  const savedTheme = localStorage.getItem('theme') || (prefersDark.matches ? 'dark' : 'light');
-  setTheme(savedTheme);
+  // Set initial theme based on system preference
+  setTheme(prefersDark.matches ? 'dark' : 'light');
+
+  // Listen for system theme changes
+  prefersDark.addEventListener('change', (e) => {
+    setTheme(e.matches ? 'dark' : 'light');
+  });
 
   themeButtons.forEach(btn => {
     btn.addEventListener('click', toggleTheme);
