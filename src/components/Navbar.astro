@@ -3,6 +3,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const title = "Apiary";
+const organizationURL = 'https://github.com/Sporkway';
 ---
 
 <nav class="navbar">
@@ -21,8 +22,8 @@ const title = "Apiary";
     <div class="nav-links">
       <a href="/case-study">Case Study</a>
       <a href="/docs">Docs</a>
-      <a href="/team">Team</a>
-      <a href="/contact" class="external-link">
+      <a href="/#team">Team</a>
+      <a href={organizationURL} target="_blank" class="external-link">
         Github
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
