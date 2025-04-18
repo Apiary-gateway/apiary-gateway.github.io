@@ -1,37 +1,32 @@
 ---
-// Frontmatter can stay empty or include metadata
+import "../styles/global.css";
+import Hero from "../components/Hero.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/src/styles/global.css" />
-    <title>Apiary</title>
+    <title>Willow CDC</title>
   </head>
   <body>
-    <header>
-      <h1>Case Study: Apiary</h1>
-      <p>Brief intro...</p>
-    </header>
+    <Hero />
 
-    <section id="overview">
-      <h2>Overview</h2>
-      <p>Describe the problem or opportunity.</p>
-    </section>
+    <main>
+      <h2>About Willow CDC</h2>
+      <p>
+        Willow Community Development Corporation is dedicated to improving the quality of life in our neighborhoods...
+      </p>
 
-    <section id="approach">
-      <h2>Our Approach</h2>
-      <p>Detail how you tackled it.</p>
-    </section>
+      <h3>Projects</h3>
+      <ul>
+        <li><a href="#">Affordable Housing</a></li>
+        <li><a href="#">Youth Programs</a></li>
+        <li><a href="#">Local Events</a></li>
+      </ul>
+    </main>
 
-    <section id="results">
-      <h2>Results</h2>
-      <p>What impact did you make?</p>
-    </section>
-
-    <footer>
-      <p>&copy; 2025 Your Name</p>
-    </footer>
+    <Footer />
   </body>
 </html>
