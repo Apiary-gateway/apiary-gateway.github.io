@@ -1,90 +1,104 @@
+---
+const { heroText, heroSubtext } = Astro.props
+---
+
 <section class="hero">
   <div class="hero-content">
-    <h1>Building Stronger Communities Together</h1>
-    <p>Willow CDC is dedicated to creating sustainable and thriving neighborhoods through community development initiatives.</p>
-    <div class="hero-buttons">
-      <a href="/about" class="primary-button">Learn More</a>
-      <a href="/donate" class="secondary-button">Support Us</a>
-    </div>
+    <h1>{heroText}</h1>
+    <p>{heroSubtext}</p>
+    <a href="/case-study" class="hero-button">Read Case Study</a>
   </div>
 </section>
 
 <style>
+  :root {
+    --primary-color: #4CAF50;
+    --secondary-color: #45A049;
+    --text-color: #ffffff;
+    --overlay-color: rgba(0, 0, 0, 0.4);
+  }
+
   .hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/hero-bg.jpg');
+    position: relative;
+    height: 95vh;
+    width: 100%;
+    background: linear-gradient(var(--overlay-color), var(--overlay-color)), 
+                url('/hero-bg.jpg');
     background-size: cover;
     background-position: center;
-    color: white;
-    padding: 6rem 1rem;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
     text-align: center;
+    padding: 0 1rem;
+    overflow: hidden;
   }
 
   .hero-content {
+    position: relative;
+    z-index: 2;
     max-width: 800px;
-    margin: 0 auto;
+    animation: fadeInUp 1s ease-out;
+    margin-top: -100px;
   }
 
   .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 2.5rem;
+    font-weight: 800;
     line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .hero p {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
+    font-size: clamp(1.5rem, 2vw, 1.5rem);
+    margin-bottom: 3.5rem;
     opacity: 0.9;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   }
 
-  .hero-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
-
-  .primary-button,
-  .secondary-button {
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-
-  .primary-button {
+  .hero-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
     background-color: var(--primary-color);
-    color: white;
+    color: var(--text-color);
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  .secondary-button {
-    background-color: transparent;
-    color: white;
-    border: 2px solid white;
-  }
-
-  .primary-button:hover {
+  .hero-button:hover {
     background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
 
-  .secondary-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @media (max-width: 768px) {
     .hero {
-      padding: 4rem 1rem;
+      background-attachment: scroll;
     }
-
-    .hero h1 {
-      font-size: 2rem;
-    }
-
-    .hero p {
-      font-size: 1rem;
-    }
-
-    .hero-buttons {
-      flex-direction: column;
+    
+    .hero-content {
+      padding: 0 1.5rem;
     }
   }
-</style> 
+</style>
