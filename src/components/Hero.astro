@@ -18,30 +18,33 @@ const { heroText, heroSubtext } = Astro.props
     --overlay-color: rgba(0, 0, 0, 0.4);
   }
 
-  .hero {
-    position: relative;
-    height: 95vh;
-    width: 100%;
-    background: linear-gradient(var(--overlay-color), var(--overlay-color)), 
-                url('/hero-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-color);
-    text-align: center;
-    padding: 0 1rem;
-    overflow: hidden;
-  }
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background: var(--hero-gradient);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  text-align: center;
+  padding: 0 1rem;
+  overflow: hidden;
+  margin-top: 0;
+  transition: background 0.3s ease;
+}
+
 
   .hero-content {
     position: relative;
     z-index: 2;
     max-width: 800px;
     animation: fadeInUp 1s ease-out;
-    margin-top: -100px;
+    margin-top: 0;
+    padding-top: 80px;
   }
 
   .hero h1 {
@@ -49,22 +52,24 @@ const { heroText, heroSubtext } = Astro.props
     margin-bottom: 2.5rem;
     font-weight: 800;
     line-height: 1.2;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   }
 
   .hero p {
     font-size: clamp(1.5rem, 2vw, 1.5rem);
     margin-bottom: 3.5rem;
-    opacity: 0.9;
+    color: var(--text-primary);
+    opacity: 0.95;
     line-height: 1.6;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
 
   .hero-button {
     display: inline-block;
     padding: 1rem 2.5rem;
     background-color: var(--primary-color);
-    color: var(--text-color);
+    color: var(--text-primary);
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
@@ -76,7 +81,7 @@ const { heroText, heroSubtext } = Astro.props
   }
 
   .hero-button:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color-hover);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
@@ -102,3 +107,38 @@ const { heroText, heroSubtext } = Astro.props
     }
   }
 </style>
+
+<script>
+  const updateHeroTheme = (theme) => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.style.setProperty('--hero-gradient', 'linear-gradient(135deg, #1a1a1a, #2d2d2d, #404040)');
+      root.style.setProperty('--primary-color', '#4CAF50');
+      root.style.setProperty('--primary-color-hover', '#45A049');
+    } else {
+      root.style.setProperty('--hero-gradient', 'linear-gradient(135deg, #f0f2f5, #e2e5e9, #d4d8dd)');
+      root.style.setProperty('--primary-color', '#45A049');
+      root.style.setProperty('--primary-color-hover', '#3d8b40');
+    }
+  };
+
+  // Listen for theme changes
+  document.addEventListener('DOMContentLoaded', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateHeroTheme(currentTheme);
+
+    // Listen for theme changes from the navbar
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          updateHeroTheme(document.documentElement.getAttribute('data-theme'));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+  });
+</script>

@@ -68,16 +68,21 @@ const organizationURL = 'https://github.com/Sporkway';
 
 <style>
   .navbar {
-    background-color: var(--color-navbar);
+    background-color: var(--navbar-bg);
     padding: 1rem 0;
-    border-bottom: 1px solid var(--color-navbar-border);
+    border-bottom: 1px solid var(--navbar-border);
     width: 100%;
-    position: relative;
-    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .navbar-container {
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 0 1rem;
     display: flex;
     justify-content: space-between;
@@ -95,7 +100,7 @@ const organizationURL = 'https://github.com/Sporkway';
   }
 
   .brand-name {
-    color: var(--color-text);
+    color: var(--text-primary);
     font-weight: 700;
     font-size: 1.5rem;
   }
@@ -108,16 +113,16 @@ const organizationURL = 'https://github.com/Sporkway';
 
   .nav-links a {
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--text-primary);
     font-weight: 500;
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    transition: color var(--transition-normal);
+    transition: color 0.3s ease;
   }
 
   .nav-links a:hover {
-    color: var(--color-primary);
+    color: var(--primary-color);
   }
 
   .external-link svg {
@@ -139,7 +144,7 @@ const organizationURL = 'https://github.com/Sporkway';
     display: block;
     width: 24px;
     height: 2px;
-    background-color: var(--color-text);
+    background-color: var(--text-primary);
     transition: all 0.3s ease;
   }
 
@@ -148,7 +153,7 @@ const organizationURL = 'https://github.com/Sporkway';
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    color: var(--color-text);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
   }
@@ -160,10 +165,11 @@ const organizationURL = 'https://github.com/Sporkway';
     width: 80%;
     max-width: 300px;
     height: 100vh;
-    background-color: var(--color-navbar);
+    background-color: var(--navbar-bg);
     transition: left 0.3s ease;
     z-index: 999;
     padding: 2rem 1rem;
+    border-right: 1px solid var(--navbar-border);
   }
 
   .mobile-menu.active {
@@ -174,7 +180,7 @@ const organizationURL = 'https://github.com/Sporkway';
     background: none;
     border: none;
     font-size: 2rem;
-    color: var(--color-text);
+    color: var(--text-primary);
     cursor: pointer;
     position: absolute;
     top: 1rem;
@@ -189,7 +195,7 @@ const organizationURL = 'https://github.com/Sporkway';
   }
 
   .mobile-menu-content a {
-    color: var(--color-text);
+    color: var(--text-primary);
     text-decoration: none;
     font-size: 1.2rem;
     display: flex;
@@ -199,7 +205,7 @@ const organizationURL = 'https://github.com/Sporkway';
 
   .mobile-menu-content hr {
     border: 0;
-    border-top: 1px solid var(--color-navbar-border);
+    border-top: 1px solid var(--navbar-border);
   }
 
   @media (max-width: 768px) {
@@ -241,6 +247,7 @@ const organizationURL = 'https://github.com/Sporkway';
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     updateThemeIcons(theme);
+    updateThemeColors(theme);
   };
 
   const updateThemeIcons = (theme) => {
@@ -248,6 +255,21 @@ const organizationURL = 'https://github.com/Sporkway';
     document.querySelectorAll('#theme-icon, #theme-icon-mobile').forEach(el => {
       el.innerHTML = icon;
     });
+  };
+
+  const updateThemeColors = (theme) => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.style.setProperty('--navbar-bg', '#1a1a1a');
+      root.style.setProperty('--navbar-border', '#2d2d2d');
+      root.style.setProperty('--text-primary', '#ffffff');
+      root.style.setProperty('--primary-color', '#4CAF50');
+    } else {
+      root.style.setProperty('--navbar-bg', '#ffffff');
+      root.style.setProperty('--navbar-border', '#e0e0e0');
+      root.style.setProperty('--text-primary', '#333333');
+      root.style.setProperty('--primary-color', '#45A049');
+    }
   };
 
   const toggleTheme = () => {
