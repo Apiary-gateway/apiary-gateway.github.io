@@ -1,0 +1,131 @@
+---
+// src/components/Team.astro
+
+const teamMembers = [
+  {
+    name: "KJ Poccia",
+    image: "https://randomuser.me/api/portraits/women/55.jpg",
+    social: {
+      linkedin: "#",
+      github: "#",
+      email: "#"
+    }
+  },
+  {
+    name: "Ping Honzoy",
+    image: "https://randomuser.me/api/portraits/women/85.jpg",
+    social: {
+      linkedin: "#",
+      github: "#",
+      email: "#"
+    }
+  },
+  {
+    name: "Rapahel Costa",
+    image: "https://randomuser.me/api/portraits/men/12.jpg",
+    social: {
+      linkedin: "#",
+      github: "#",
+      email: "#"
+    }
+  },
+  {
+    name: "Shwetank Tewari",
+    image: "https://randomuser.me/api/portraits/men/30.jpg",
+    social: {
+      linkedin: "#",
+      github: "#",
+      email: "#"
+    }
+  }
+];
+---
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<section class="team">
+  <h2>Our Team</h2>
+  <div class="team-container">
+    {teamMembers.map((member) => (
+      <div class="team-member">
+        <img src={member.image} alt={`${member.name}'s profile picture`} />
+        <h3>{member.name}</h3>
+        <div class="social-links">
+          <a href={member.social.linkedin} aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href={member.social.github} aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href={member.social.email} aria-label="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .team {
+    padding: 4rem 1rem;
+    background-color: var(--color-background);
+  }
+
+  .team h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--color-text);
+  }
+
+  .team-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .team-member {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid var(--color-primary);
+  }
+
+  .team-member h3 {
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+
+  .team-member .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .team-member .social-links a {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .team-member .social-links a:hover {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 1024px) {
+    .team-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .team-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style> 

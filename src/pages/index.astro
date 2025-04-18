@@ -1,37 +1,206 @@
 ---
-// Frontmatter can stay empty or include metadata
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Team from '../components/Team.astro';
+
+const sections = [
+  {
+    title: "Lorem Ipsum",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    image: "/images/homepage-img1.jpg"
+  },
+  {
+    title: "Lorem Ipsum",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    image: "/images/homepage-img2.jpg"
+  },
+  {
+    title: "Lorem Ipsum",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    image: "/images/homepage-img3.jpg",
+    hasButton: true
+  }
+];
+
+const heroText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/src/styles/global.css" />
-    <title>Apiary</title>
-  </head>
-  <body>
-    <header>
-      <h1>Case Study: Apiary</h1>
-      <p>Brief intro...</p>
-    </header>
+<BaseLayout>
+  <Hero 
+    heroText={heroText} 
+    heroSubtext={heroSubtext}
+  />
 
-    <section id="overview">
-      <h2>Overview</h2>
-      <p>Describe the problem or opportunity.</p>
-    </section>
+  <div class="alternating-sections">
+    {sections.map((section, index) => (
+      <section class={`section ${index % 2 === 0 ? 'left' : 'right'}`}>
+        <div class="section-content">
+          <div class="text-content">
+            <h2>{section.title}</h2>
+            <p>{section.description}</p>
+            {section.hasButton && (
+              <a href="/case-study" class="hero-button">Read Case Study</a>
+            )}
+          </div>
+          <div class="image-content">
+            <img src={section.image} alt={section.title} />
+          </div>
+        </div>
+      </section>
+    ))}
+  </div>
 
-    <section id="approach">
-      <h2>Our Approach</h2>
-      <p>Detail how you tackled it.</p>
-    </section>
+  <section id="team">
+    <Team />
+  </section>
+</BaseLayout>
 
-    <section id="results">
-      <h2>Results</h2>
-      <p>What impact did you make?</p>
-    </section>
+<style>
+  .alternating-sections {
+    padding: 4rem 0;
+  }
 
-    <footer>
-      <p>&copy; 2025 Your Name</p>
-    </footer>
-  </body>
-</html>
+  .section {
+    padding: 4rem 0;
+    position: relative;
+  }
+
+  .section:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(to right, 
+      transparent, 
+      rgba(0, 0, 0, 0.2) 20%, 
+      rgba(0, 0, 0, 0.2) 80%, 
+      transparent
+    );
+  }
+
+  .section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .section.left .section-content {
+    grid-template-areas: "text image";
+  }
+
+  .section.right .section-content {
+    grid-template-areas: "image text";
+  }
+
+  .text-content {
+    grid-area: text;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 100%;
+  }
+
+  .text-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+
+  .text-content p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+    flex: 1;
+  }
+
+  .image-content {
+    grid-area: image;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .image-content img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .image-content:hover img {
+    transform: scale(1.05);
+  }
+
+  .text-content .hero-button {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: fit-content;
+    align-self: center;
+  }
+
+  .text-content .hero-button:hover {
+    background-color: var(--primary-color-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  #team {
+    position: relative;
+    padding-top: 4rem;
+  }
+
+  #team::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(to right, 
+      transparent, 
+      rgba(0, 0, 0, 0.2) 20%, 
+      rgba(0, 0, 0, 0.2) 80%, 
+      transparent
+    );
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      grid-template-columns: 1fr;
+      grid-template-areas: "image" "text" !important;
+      gap: 2rem;
+    }
+
+    .text-content h2 {
+      font-size: 2rem;
+    }
+
+    .section {
+      padding: 3rem 0;
+    }
+  }
+</style>

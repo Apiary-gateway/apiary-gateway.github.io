@@ -1,0 +1,125 @@
+---
+// src/components/Footer.astro
+---
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <img src="/apiary-logo.png" alt="Apiary Logo" />
+        </a>
+        <span class="brand-name">Apiary</span>
+      </div>
+      <div class="footer-links">
+        <a href="/case-study">Case Study</a>
+        <a href="/docs">Docs</a>
+        <a href="/team">Team</a>
+        <a href="https://github.com/Sporkway" target="_blank" class="external-link">
+          Github
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Apiary. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-navbar);
+    border-top: 1px solid var(--color-navbar-border);
+    padding: 1rem 0 0.5rem;
+    width: 100%;
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .footer-brand .logo img {
+    height: 40px;
+    width: auto;
+  }
+
+  .brand-name {
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .footer-links a {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color var(--transition-normal);
+    font-size: 1rem;
+  }
+
+  .footer-links a:hover {
+    color: var(--color-primary);
+  }
+
+  .external-link svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .footer-bottom {
+    color: var(--color-text);
+    font-size: 0.9rem;
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-navbar-border);
+  }
+
+  @media (max-width: 768px) {
+    .footer-main {
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>
