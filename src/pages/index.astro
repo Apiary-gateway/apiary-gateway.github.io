@@ -64,6 +64,7 @@ const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Se
   .section {
     padding: 4rem 0;
     position: relative;
+    background-color: var(--section-background);
   }
 
   .section:not(:last-child)::after {
@@ -74,12 +75,7 @@ const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Se
     transform: translateX(-50%);
     width: 80%;
     height: 2px;
-    background: linear-gradient(to right, 
-      transparent, 
-      rgba(0, 0, 0, 0.2) 20%, 
-      rgba(0, 0, 0, 0.2) 80%, 
-      transparent
-    );
+    background: var(--section-divider);
   }
 
   .section-content {
@@ -111,14 +107,14 @@ const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Se
   .text-content h2 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--color-primary);
     margin-bottom: 1rem;
   }
 
   .text-content p {
     font-size: 1.2rem;
     line-height: 1.6;
-    color: #333;
+    color: var(--section-text);
     flex: 1;
   }
 
@@ -170,6 +166,7 @@ const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Se
   #team {
     position: relative;
     padding-top: 4rem;
+    background-color: var(--section-background);
   }
 
   #team::before {
@@ -180,12 +177,7 @@ const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Se
     transform: translateX(-50%);
     width: 80%;
     height: 2px;
-    background: linear-gradient(to right, 
-      transparent, 
-      rgba(0, 0, 0, 0.2) 20%, 
-      rgba(0, 0, 0, 0.2) 80%, 
-      transparent
-    );
+    background: var(--section-divider);
   }
 
   @media (max-width: 768px) {

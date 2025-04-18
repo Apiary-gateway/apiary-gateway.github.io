@@ -1,7 +1,4 @@
 ---
-// src/pages/navbar.astro
-import BaseLayout from '../layouts/BaseLayout.astro';
-
 const title = "Apiary";
 const organizationURL = 'https://github.com/Sporkway';
 ---
@@ -92,6 +89,7 @@ const organizationURL = 'https://github.com/Sporkway';
   .logo-container {
     display: flex;
     align-items: center;
+    gap: 1rem;
   }
 
   .logo img {
@@ -99,10 +97,15 @@ const organizationURL = 'https://github.com/Sporkway';
     width: auto;
   }
 
-  .brand-name {
+  .brand-name a {
     color: var(--text-primary);
     font-weight: 700;
     font-size: 1.5rem;
+    text-decoration: none;
+  }
+
+  [data-theme='dark'] .brand-name a {
+    color: #ffffff;
   }
 
   .nav-links {
@@ -216,6 +219,12 @@ const organizationURL = 'https://github.com/Sporkway';
     .nav-links {
       display: none;
     }
+
+    .brand-name {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
   }
 </style>
 
@@ -239,7 +248,7 @@ const organizationURL = 'https://github.com/Sporkway';
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
     `,
     moon: `
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      <path d="M21 12.79A9 9 0 1 1 11.21 3A7 7 0 0 0 21 12.79z"></path>
     `
   };
 
@@ -251,7 +260,7 @@ const organizationURL = 'https://github.com/Sporkway';
   };
 
   const updateThemeIcons = (theme) => {
-    const icon = theme === 'dark' ? icons.moon: icons.sun;
+    const icon = theme === 'dark' ? icons.sun : icons.moon;
     document.querySelectorAll('#theme-icon, #theme-icon-mobile').forEach(el => {
       el.innerHTML = icon;
     });
