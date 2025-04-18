@@ -1,6 +1,8 @@
 ---
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = "Apiary"
 ---
 
 <nav class="navbar">
@@ -9,7 +11,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <a href="/" class="logo">
         <img src="/apiary-logo.png" alt="Apiary Logo" />
       </a>
-      <span class="brand-name">Apiary</span>
+      <span class="brand-name"><a href="/">{title}</a></span>
     </div>
     <div class="nav-links">
       <a href="/case-study">Case Study</a>
@@ -47,7 +49,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .logo-container {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    
     flex: 1;
   }
 
