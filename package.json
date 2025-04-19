@@ -10,6 +10,7 @@
     "pre-deploy": "rm -rf docs && mkdir docs && npm run build && cp -r dist/* docs/ && touch docs/.nojekyll"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.2.4",
     "astro": "^5.7.4"
   }
 }

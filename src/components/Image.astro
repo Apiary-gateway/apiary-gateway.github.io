@@ -1,0 +1,45 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  height?: string;
+  width?: string;
+  caption?: string;
+}
+
+const { src, alt, height = 'auto', width = '100%', caption } = Astro.props;
+---
+
+<figure class="image-container">
+  <img
+    src={src}
+    alt={alt}
+    class="image"
+    loading="lazy"
+  />
+  {caption && (
+    <figcaption class="image-caption">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .image-container {
+    margin: 2rem 0;
+  }
+
+  .image {
+    height: v-bind(height);
+    width: v-bind(width);
+  }
+
+  .image-caption {
+    text-align: center;
+    margin-top: 0;
+    max-width: 80ch;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+  }
+</style> 

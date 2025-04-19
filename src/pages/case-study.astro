@@ -1,7 +1,76 @@
 ---
+import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Introduction from '../content/case-study/introduction.astro';
+import Research from '../content/case-study/research.astro';
+import Design from '../content/case-study/design.astro';
+
+// Define the structure of your case study content
+const headings = [
+  {
+    id: "introduction",
+    title: "Introduction",
+    children: [
+      {
+        id: "overview",
+        title: "Overview"
+      },
+      {
+        id: "problem-statement",
+        title: "Problem Statement"
+      }
+    ]
+  },
+  {
+    id: "research",
+    title: "Research",
+    children: [
+      {
+        id: "user-research",
+        title: "User Research"
+      },
+      {
+        id: "market-analysis",
+        title: "Market Analysis"
+      }
+    ]
+  },
+  {
+    id: "design",
+    title: "Design",
+    children: [
+      {
+        id: "wireframes",
+        title: "Wireframes"
+      },
+      {
+        id: "prototypes",
+        title: "Prototypes"
+      }
+    ]
+  }
+];
+
+// Helper: Build child image map
+function extractChildImages(children = []) {
+  return Object.fromEntries(
+    children
+      .filter((child) => child.img)
+      .map((child) => [child.id, child.img])
+  );
+}
 ---
 
 <BaseLayout>
-  <h1>Case Study</h1>
+  <SidebarScrollLayout headings={headings}>
+    <slot>
+      {headings.map(({ id }) => (
+        <>
+          {id === 'introduction' && <Introduction />}
+          {id === 'research' && <Research />}
+          {id === 'design' && <Design />}
+        </>
+      ))}
+    </slot>
+  </SidebarScrollLayout>
 </BaseLayout>
