@@ -146,7 +146,7 @@ const { children, headings } = Astro.props;
     margin-bottom: 1rem;
     line-height: 1.8;
     color: var(--color-text);
-    text-align: left;
+    text-align: justify;
   }
 
   :global(.content-wrapper p:last-child) {
@@ -223,9 +223,13 @@ const { children, headings } = Astro.props;
         }
       });
     },
-    { rootMargin: '-50% 0px -50% 0px' }
+    { 
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: [0, 0.5, 1]
+    }
   );
 
+  // Observe all headings
   document.querySelectorAll('h2, h3').forEach((heading) => {
     observer.observe(heading);
   });
@@ -237,7 +241,7 @@ const { children, headings } = Astro.props;
       const targetId = this.getAttribute('href');
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
-        const headerOffset = 120; // Increased offset to ensure visibility
+        const headerOffset = 120;
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -248,7 +252,41 @@ const { children, headings } = Astro.props;
           top: finalPosition,
           behavior: 'smooth'
         });
+
+        // Update active state immediately
+        document.querySelectorAll('.toc-link').forEach((el) => {
+          el.classList.remove('active');
+        });
+        this.classList.add('active');
       }
     });
+  });
+
+  // Handle scroll events to update active state
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const headings = document.querySelectorAll('h2, h3');
+      let activeHeading = null;
+      
+      headings.forEach((heading) => {
+        const rect = heading.getBoundingClientRect();
+        if (rect.top <= 150 && rect.bottom >= 0) {
+          activeHeading = heading;
+        }
+      });
+
+      if (activeHeading) {
+        const id = activeHeading.getAttribute('id');
+        document.querySelectorAll('.toc-link').forEach((el) => {
+          el.classList.remove('active');
+        });
+        const activeLink = document.querySelector(`a[href="#${id}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+      }
+    }, 100);
   });
 </script>
