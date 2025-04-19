@@ -143,15 +143,6 @@ const headings = [
     ]
   }
 ];
-
-// Helper: Build child image map
-function extractChildImages(children = []) {
-  return Object.fromEntries(
-    children
-      .filter((child) => child.img)
-      .map((child) => [child.id, child.img])
-  );
-}
 ---
 
 <BaseLayout>
