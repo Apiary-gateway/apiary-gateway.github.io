@@ -1,0 +1,31 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  size?: 'small' | 'medium' | 'large' | 'full';
+  caption?: string;
+}
+
+const { src, alt, size = 'medium', caption } = Astro.props;
+
+const sizeClasses = {
+  small: 'max-w-[400px]',
+  medium: 'max-w-[600px]',
+  large: 'max-w-[800px]',
+  full: 'max-w-full'
+};
+---
+
+<figure class="my-8">
+  <img
+    src={src}
+    alt={alt}
+    class={`${sizeClasses[size]} mx-auto rounded-lg shadow-md`}
+    loading="lazy"
+  />
+  {caption && (
+    <figcaption class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+      {caption}
+    </figcaption>
+  )}
+</figure> 
