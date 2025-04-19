@@ -3,6 +3,7 @@ import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Introduction from '../content/case-study/introduction.astro';
 import Background from '../content/case-study/background.astro';
+import ExistingSolutions from '../content/case-study/existing-solutions.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -38,7 +39,20 @@ const headings = [
       }
     ]
   },
-  
+  {
+    id: "existing-solutions",
+    title: "Existing Solutions",
+    children: [
+      {
+        id: "overview",
+        title: "Overview"
+      },
+      {
+        id: "tradeoffs",
+        title: "Tradeoffs"
+      }
+    ]
+  }
 ];
 
 // Helper: Build child image map
@@ -58,6 +72,7 @@ function extractChildImages(children = []) {
         <>
           {id === 'introduction' && <Introduction />}
           {id === 'background' && <Background />}
+          {id === 'existing-solutions' && <ExistingSolutions />}
         </>
       ))}
     </slot>
