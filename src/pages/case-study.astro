@@ -5,6 +5,7 @@ import Introduction from '../content/case-study/introduction.astro';
 import Background from '../content/case-study/background.astro';
 import ExistingSolutions from '../content/case-study/existing-solutions.astro';
 import OurSolution from '../content/case-study/our-solution.astro';
+import BuildingApiary from '../content/case-study/building-apiary.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -71,6 +72,48 @@ const headings = [
         title: "Using Apiary"
       }
     ]
+  },
+  {
+    id: "building-apiary",
+    title: "Building Apiary",
+    children: [
+      {
+        id: "serverless-architecture",
+        title: "Serverless Architecture"
+      },
+      {
+        id: "request-response-transformation",
+        title: "Request/Response Transformation"
+      },
+      {
+        id: "api-key-management",
+        title: "API Key Management"
+      },
+      {
+        id: "managing-conversation-history",
+        title: "Managing Conversation History"
+      },
+      {
+        id: "configurable-routing",
+        title: "Configurable Routing"
+      },
+      {
+        id: "caching",
+        title: "Caching"
+      },
+      {
+        id: "guardrails",
+        title: "Guardrails"
+      },
+      {
+        id: "collecting-and-storing-observability-data",
+        title: "Collecting and Storing Observability Data"
+      },
+      {
+        id: "observability-and-management-dashboard",
+        title: "Observability and Management Dashboard"
+      }
+    ]
   }
 ];
 
@@ -93,6 +136,7 @@ function extractChildImages(children = []) {
           {id === 'background' && <Background />}
           {id === 'existing-solutions' && <ExistingSolutions />}
           {id === 'our-solution' && <OurSolution />}
+          {id === 'building-apiary' && <BuildingApiary />}
         </>
       ))}
     </slot>

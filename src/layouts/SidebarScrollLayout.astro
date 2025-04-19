@@ -244,6 +244,12 @@ const { children, headings } = Astro.props;
       margin-bottom: 1rem;
     }
 
+    :global(.content-wrapper h4) {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
     :global(.content-wrapper p) {
       line-height: 1.7;
       margin-bottom: 1.25rem;
@@ -251,6 +257,13 @@ const { children, headings } = Astro.props;
 
     :global(.content-wrapper img) {
       max-width: 100%;
+    }
+
+    :global(.content-wrapper .info-box) {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background-color: var(--color-background);
+      border: 1px solid var(--color-border);
     }
   }
 
