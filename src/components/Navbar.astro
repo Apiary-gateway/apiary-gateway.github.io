@@ -78,8 +78,6 @@ const organizationURL = 'https://github.com/Sporkway';
 
   .navbar-container {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
     padding: 0 1rem;
     display: flex;
     justify-content: space-between;
@@ -89,7 +87,7 @@ const organizationURL = 'https://github.com/Sporkway';
   .logo-container {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: left;
   }
 
   .logo img {
@@ -122,10 +120,25 @@ const organizationURL = 'https://github.com/Sporkway';
     align-items: center;
     gap: 0.25rem;
     transition: color 0.3s ease;
+    position: relative;
   }
 
   .nav-links a:hover {
     color: var(--primary-color);
+  }
+
+  .nav-links a.active {
+    color: var(--primary-color);
+  }
+
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
   }
 
   .external-link svg {
@@ -204,6 +217,21 @@ const organizationURL = 'https://github.com/Sporkway';
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+  }
+
+  .mobile-menu-content a.active {
+    color: var(--primary-color);
+  }
+
+  .mobile-menu-content a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
   }
 
   .mobile-menu-content hr {
@@ -212,18 +240,27 @@ const organizationURL = 'https://github.com/Sporkway';
   }
 
   @media (max-width: 768px) {
+    .navbar-container {
+      padding: 0 1rem;
+    }
+
+    .logo-container {
+      flex: 1;
+      justify-content: flex-start;
+    }
+
     .hamburger {
       display: flex;
+      margin-right: 0.5rem;
+    }
+
+    .brand-name {
+      position: static;
+      margin-left: 0.5rem;
     }
 
     .nav-links {
       display: none;
-    }
-
-    .brand-name {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
     }
   }
 </style>
@@ -234,6 +271,7 @@ const organizationURL = 'https://github.com/Sporkway';
   const closeBtn = document.querySelector('.close-btn');
   const themeButtons = document.querySelectorAll('.theme-toggle');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const navLinks = document.querySelectorAll('.nav-links a, .mobile-menu-content a');
 
   const icons = {
     sun: `
@@ -311,5 +349,13 @@ const organizationURL = 'https://github.com/Sporkway';
 
   closeBtn.addEventListener('click', () => {
     mobileMenu.classList.remove('active');
+  });
+
+  // Add active class to current page link
+  const currentPath = window.location.pathname;
+  navLinks.forEach(link => {
+    if (link.getAttribute('href') === currentPath) {
+      link.classList.add('active');
+    }
   });
 </script>
