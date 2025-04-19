@@ -1,7 +1,9 @@
 ---
 import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import mdxConfig from '../mdx.config.js';
+import Introduction from '../content/case-study/introduction.astro';
+import Research from '../content/case-study/research.astro';
+import Design from '../content/case-study/design.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -58,26 +60,6 @@ const headings = [
   }
 ];
 
-// Dynamically import all content from content/case-study directory
-const sectionComponents = Object.fromEntries(
-  await Promise.all(
-    headings.flatMap(section => [
-      [section.id, import(`../content/case-study/${section.id}.mdx`)],
-      ...(section.children || []).map(child => 
-        [child.id, import(`../content/case-study/${child.id}.mdx`)]
-      )
-    ]).map(async ([id, importPromise]) => {
-      try {
-        const module = await importPromise;
-        return [id, module.default];
-      } catch (error) {
-        console.error(`Error loading MDX for ${id}:`, error);
-        return [id, null];
-      }
-    })
-  )
-);
-
 // Helper: Build child image map
 function extractChildImages(children = []) {
   return Object.fromEntries(
@@ -92,28 +74,15 @@ function extractChildImages(children = []) {
   <SidebarScrollLayout headings={headings}>
     <slot>
       {headings.map(({ id, img, children }) => {
-        const Component = sectionComponents[id];
         const childImages = extractChildImages(children);
-        return Component ? (
-          <div class="section-content" id={id}>
-            <div class="content-wrapper">
-              <Component components={mdxConfig.components} img={img} childImages={childImages} />
-            </div>
-          </div>
-        ) : null;
+        return (
+          <>
+            {id === 'introduction' && <Introduction img={img} childImages={childImages} />}
+            {id === 'research' && <Research img={img} childImages={childImages} />}
+            {id === 'design' && <Design img={img} childImages={childImages} />}
+          </>
+        );
       })}
-      {headings.flatMap(({ children = [] }) => 
-        children.map(({ id, img }) => {
-          const Component = sectionComponents[id];
-          return Component ? (
-            <div class="section-content" id={id}>
-              <div class="content-wrapper">
-                <Component components={mdxConfig.components} img={img} />
-              </div>
-            </div>
-          ) : null;
-        })
-      )}
     </slot>
   </SidebarScrollLayout>
 </BaseLayout>
