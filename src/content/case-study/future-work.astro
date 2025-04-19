@@ -1,0 +1,52 @@
+---
+---
+<section id="future-work">
+    <h2>Future Work</h2>
+    <p>Apiary provides powerful capabilities for developing and managing LLM applications, but there are several areas where we can enhance the platform further. Our team has identified the following areas for improvement:</p>
+
+    <h3 id="improving-resiliency">Improving Resiliency</h3>
+
+    <ul>
+        <li>Streamline the complexity of migrating older logs from DynamoDB to Athena to make it ACID compliant. The current process involves many steps, and ideally we’d like to configure the process so that if one step fails, the process halts and rolls back all prior steps to their previous states before trying again.</li>
+        <li>Decouple the routing and logging functionalities</li>
+    </ul>
+
+    <h3 id="user-querying">User Querying</h3>
+
+    <ul>
+        <li>Give users the ability to run their own custom queries on the observability data</li>
+    </ul>
+
+    <h3 id="optimizing-latency">Optimizing Latency</h3>
+
+    <ul>
+        <li>Add in-memory caches to improve response times. While we made a tradeoff for simplicity over speed with our current caching systems, having an option to use faster in-memory caches might be worth it for certain use cases.</li>
+        <li>Implement real-time streaming to improve the perception of latency</li>
+    </ul>
+
+    <h3 id="conversation-management">Conversation Management</h3>
+
+    <ul>
+        <li>Implement prompt management systems for better control and organization</li>
+        <li>Deploy token-based rate limiting to set limits on conversation history</li>
+        <li>When conversation limits are reached:
+            <ul>
+                <li>Leverage an LLM to summarize previous conversation content</li>
+                <li>Or simply return an error code and require users to start a new conversation</li>
+            </ul>
+    </ul>
+
+    <h3 id="additional-guardrail-features">Additional Guardrail Features</h3>
+
+    <ul>
+        <li>Introduce more granular control over guardrails:
+            <ul>
+                <li>Categorize the stance of responses (affirm or reject) and only block those that affirm prohibited utterances</li>
+                <li>Add metadata to guardrails to allow for specific actions for each guardrail</li>
+                <li>Apply different semantic similarity thresholds for prompts versus responses to more heavily weight the response similarity</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p>By addressing these areas, Apiary can evolve into an even more robust, responsive, and effective platform for managing LLM applications.</p>
+</section>

@@ -6,6 +6,7 @@ import Background from '../content/case-study/background.astro';
 import ExistingSolutions from '../content/case-study/existing-solutions.astro';
 import OurSolution from '../content/case-study/our-solution.astro';
 import BuildingApiary from '../content/case-study/building-apiary.astro';
+import FutureWork from '../content/case-study/future-work.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -114,6 +115,32 @@ const headings = [
         title: "Observability and Management Dashboard"
       }
     ]
+  },
+  {
+    id: "future-work",
+    title: "Future Work",
+    children: [
+      {
+        id: "improving-resiliency",
+        title: "Improving Resiliency"
+      },
+      {
+        id: "user-querying",
+        title: "User Querying"
+      },
+      {
+        id: "optimizing-latency",
+        title: "Optimizing Latency"
+      },
+      {
+        id: "conversation-management",
+        title: "Conversation Management"
+      },
+      {
+        id: "additional-guardrail-features",
+        title: "Additional Guardrail Features"
+      }
+    ]
   }
 ];
 
@@ -137,6 +164,7 @@ function extractChildImages(children = []) {
           {id === 'existing-solutions' && <ExistingSolutions />}
           {id === 'our-solution' && <OurSolution />}
           {id === 'building-apiary' && <BuildingApiary />}
+          {id === 'future-work' && <FutureWork />}
         </>
       ))}
     </slot>
