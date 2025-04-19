@@ -90,6 +90,7 @@ const { children, headings } = Astro.props;
     padding: 1.5rem 1.5rem 2rem 1rem; /* Reduced top padding, added bottom padding */
     width: 100%;
     max-width: 100%;
+    margin-left: auto;
   }
 
   .content {
@@ -246,6 +247,10 @@ const { children, headings } = Astro.props;
       min-width: 300px;
       max-width: 400px;
       width: 25%;
+    }
+
+    .sidebar nav {
+      padding-left: 2rem;
     }
 
     .toc-link {

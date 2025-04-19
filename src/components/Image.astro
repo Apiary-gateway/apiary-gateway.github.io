@@ -3,23 +3,43 @@ interface Props {
   src: string;
   alt: string;
   height?: string;
+  width?: string;
   caption?: string;
 }
 
-const { src, alt, height = 'auto', caption } = Astro.props;
+const { src, alt, height = 'auto', width = '100%', caption } = Astro.props;
 ---
 
-<figure class="my-8">
+<figure class="image-container">
   <img
     src={src}
     alt={alt}
-    class="w-full mx-auto rounded-lg shadow-md"
-    style={`height: ${height};`}
+    class="image"
     loading="lazy"
   />
   {caption && (
-    <figcaption class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+    <figcaption class="image-caption">
       {caption}
     </figcaption>
   )}
-</figure> 
+</figure>
+
+<style>
+  .image-container {
+    margin: 2rem 0;
+  }
+
+  .image {
+    height: v-bind(height);
+    width: v-bind(width);
+  }
+
+  .image-caption {
+    text-align: center;
+    margin-top: 0;
+    max-width: 80ch;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+  }
+</style> 
