@@ -1,6 +1,7 @@
 ---
 const title = "Apiary";
 const organizationURL = 'https://github.com/Sporkway';
+const currentPath = Astro.url.pathname;
 ---
 
 <nav class="navbar">
@@ -14,12 +15,12 @@ const organizationURL = 'https://github.com/Sporkway';
       <a href="/" class="logo">
         <img src="/apiary-logo.png" alt="Apiary Logo" />
       </a>
-      <span class="brand-name"><a href="/">{title}</a></span>
+      <span class="brand-name"><a href="/" class={currentPath === '/' ? 'active' : ''}>{title}</a></span>
     </div>
     <div class="nav-links">
-      <a href="/case-study">Case Study</a>
-      <a href="/docs">Docs</a>
-      <a href="/#team">Team</a>
+      <a href="/case-study" class={currentPath.startsWith('/case-study') ? 'active' : ''}>Case Study</a>
+      <a href="/docs" class={currentPath.startsWith('/docs') ? 'active' : ''}>Docs</a>
+      <a href="/#team" class={currentPath === '/#team' ? 'active' : ''}>Team</a>
       <a href={organizationURL} target="_blank" class="external-link">
         Github
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -39,11 +40,11 @@ const organizationURL = 'https://github.com/Sporkway';
   <div class="mobile-menu">
     <button class="close-btn" aria-label="Close menu">×</button>
     <div class="mobile-menu-content">
-      <a href="/case-study">Case Study</a>
+      <a href="/case-study" class={currentPath.startsWith('/case-study') ? 'active' : ''}>Case Study</a>
       <hr />
-      <a href="/docs">Docs</a>
+      <a href="/docs" class={currentPath.startsWith('/docs') ? 'active' : ''}>Docs</a>
       <hr />
-      <a href="/team">Team</a>
+      <a href="/team" class={currentPath === '/team' ? 'active' : ''}>Team</a>
       <hr />
       <a href="/contact" class="external-link">
         Github
@@ -271,7 +272,6 @@ const organizationURL = 'https://github.com/Sporkway';
   const closeBtn = document.querySelector('.close-btn');
   const themeButtons = document.querySelectorAll('.theme-toggle');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-  const navLinks = document.querySelectorAll('.nav-links a, .mobile-menu-content a');
 
   const icons = {
     sun: `
@@ -349,13 +349,5 @@ const organizationURL = 'https://github.com/Sporkway';
 
   closeBtn.addEventListener('click', () => {
     mobileMenu.classList.remove('active');
-  });
-
-  // Add active class to current page link
-  const currentPath = window.location.pathname;
-  navLinks.forEach(link => {
-    if (link.getAttribute('href') === currentPath) {
-      link.classList.add('active');
-    }
   });
 </script>
