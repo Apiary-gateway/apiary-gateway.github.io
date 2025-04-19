@@ -2,13 +2,15 @@
 interface Props {
   src: string;
   alt: string;
+  width?: string;
+  height?: string;
 }
 
-const { src, alt } = Astro.props;
+const { src, alt, width = '100%', height = 'auto' } = Astro.props;
 ---
 
 <figure class="mdx-image">
-  <img src={src} alt={alt} />
+  <img src={src} alt={alt} style={`width: ${width}; height: ${height};`} />
   {alt && <figcaption>{alt}</figcaption>}
 </figure>
 
@@ -25,6 +27,7 @@ const { src, alt } = Astro.props;
     display: block;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    object-fit: contain;
   }
 
   .mdx-image figcaption {
