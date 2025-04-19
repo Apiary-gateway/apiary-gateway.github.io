@@ -1,0 +1,303 @@
+---
+---
+
+<section id="building-apiary">
+    <h2>Building Apiary</h2>
+
+    <h3 id="serverless-architecture">Serverless Architecture</h3>
+
+    <h4>The Challenge</h4>
+    <p>Our first major decision was selecting an initial architecture that would serve as a solid foundation for Apiary. We needed a solution that would present client applications with a simple, secure, and consistent interface - in the quickly evolving LLM landscape, the architecture should allow for updates on the backend without changes in how client applications interact with Apiary. The architecture needed to provide flexibility, enabling us to easily integrate features like authentication, dynamic routing, and observability. Additionally, we wanted a scalable solution that would accommodate applications with variable workflows.</p>
+
+    <div class="info-box">
+        <h4>Technical Overview</h4>
+        <p>API Gateways serve as centralized entry points for client applications to access backend services or APIs. Clients send requests to the API Gateway, which routes incoming requests to appropriate backend services and handles common concerns such as authentication, rate limiting, and request/response transformation. Backend services can be adjusted without changing how client applications access them through the API Gateway.</p>
+
+        <p>API Gateways can integrate with various backend architectures, including:</p>
+        <ul>
+            <li><strong>Traditional servers (e.g., EC2)</strong>: These offer complete control and flexibility, but require upfront provisioning, manual scaling to accommodate variable traffic, ongoing management, and fixed costs even during periods of low demand.</li>
+            <li><strong>Container-based solutions (e.g., ECS/EKS)</strong>: Containers provide greater portability and scalability compared to traditional servers. However, they also introduce deployment complexity, management overhead, and typically higher baseline costs.</li>
+            <li><strong>Serverless computing</strong>: In serverless computing models, cloud providers dynamically manage the allocation and provisioning of servers. This means that serverless architectures automatically scale based on demand and don't require upfront provisioning.</li>
+        </ul>
+    </div>
+
+    <h4>Our Implementation Choices</h4>
+    <p>We chose Amazon API Gateway paired with AWS Lambda as the foundational components for Apiary. API Gateway's built-in capabilities - such as acting as a "front door" for backend APIs and centralizing management of key functions like authentication and rate limiting - made it a natural choice.</p>
+
+    <p>Behind this gateway, AWS Lambda handles dynamic workloads by running functions that execute only when triggered by incoming requests. AWS Lambda's pay-per-use pricing model means we incur costs only for actual usage, making it efficient for periods of low traffic. Additionally, Lambda's automatic scaling ensures that our system can adapt to sudden spikes in demand without manual intervention.</p>
+
+    <h4>Tradeoffs and Considerations</h4>
+    <p>Adopting a serverless architecture did involve certain tradeoffs. AWS Lambda has inherent limitations, notably the "cold start" latency - a brief initial delay (around 200ms) encountered when invoking a Lambda function after a period of inactivity. However, after this initial invocation, subsequent requests benefit from a "warm" Lambda instance, significantly reducing latency. Another limitation is Lambda's maximum execution duration of 15 minutes per request. For our typical LLM interactions, which generally complete within seconds, this rarely poses any practical issues.</p>
+
+    <p>Ultimately, choosing a serverless foundation allowed us to prioritize our development efforts on Apiary's unique capabilities rather than infrastructure management, setting a flexible and efficient base for ongoing work.</p>
+
+    <h3 id="request-response-transformation">Request/Response Transformation</h3>
+
+    <h4>The Challenge</h4>
+    <p>As we've discussed, each LLM provider implements their API differently. The variations in parameter naming, request structure, and response formats must be handled in order to build a unified API. The transformation logic can become complex, but more importantly, as providers update their APIs, the logic in the model gateway must be updated as well.</p>
+
+    <p>There are lots of opportunities for small discrepancies between the providers. For instance, to access the text response from OpenAI, you need to access the <code>content</code> property of the <code>message</code> object of the first element of the <code>choices</code> array in the response object. For Anthropic's Claude models, you need to access the <code>text</code> property in the first element of the <code>content</code> array in the response object. As another example, with OpenAI, if you want to include a developer prompt, you include the <code>"developer"</code> role in the input messages array sent in the request. To do the same with Claude, you must use the top-level <code>system</code> parameter — there is no <code>"system"</code> role for input messages in the Messages API. If you include a <code>"system"</code> role in your input messages, an error is thrown.</p>
+
+    <h4>Our Implementation</h4>
+    <p>After evaluating various approaches, we chose to wrap an <strong>established library</strong>. We built our core transformation logic around TokenJS, an open-source library that normalizes interactions with LLM providers.</p>
+
+    <p>Wrapping a library offered several advantages:</p>
+    <ul>
+        <li><strong>Reduced maintenance burden</strong> - The wrapped library stays up-to-date with API changes from almost all of the prominent providers. Wrapping a library means that we're relying on the library maintainers to make any necessary changes rather than trying to keep track of each individual change ourselves.</li>
+        <li><strong>Immediate access to many providers</strong> - The library already supports a wide range of LLM providers.</li>
+        <li><strong>Faster development</strong> - We could focus on higher-level features rather than low-level API integration.</li>
+    </ul>
+
+    <p>In our initial benchmarking, we found that wrapping the library added some latency. For example, a simple call to Claude 3.5 Sonnet took ~2500ms via the wrapper, compared to ~1250ms with a direct call. However, this was acceptable to us given that the typical latency range for LLM calls are 5000ms or more (<a href="https://gptforwork.com/tools/openai-api-and-other-llm-apis-response-time-tracker">source</a>). This tradeoff was worth it to us for the improvement in maintainability and development speed.</p>
+
+    <h4>Alternative Approaches and Tradeoffs</h4>
+    <p>In making our decision to use TokenJS, we considered two alternatives: using the built-in request/response mapping templates in AWS's API Gateway, and building a custom transformation layer from scratch. We found the API Gateway transformations to be slightly restrictive and difficult to configure, so we quickly moved on to consider creating our own transformation layer. While we were initially drawn to this option for the control and flexibility, we realized that in such a quickly changing space, we should take advantage of a library that handles any updates for us. The other side of this coin is that our decision creates a dependency risk - should the TokenJS library maintainers fall behind on updates or abandon the project, our model gateway would also fall behind. Ultimately, we felt the reduction in development effort and maintenance overhead was worth some risk that the TokenJS library becomes outdated.</p>
+
+    <h3 id="api-key-management">API Key Management</h3>
+
+    <h4>The Challenge</h4>
+    <p>Working with multiple LLM providers requires managing separate API keys for each provider. This presents several challenges for development teams, particularly for teams where multiple developers need access to these credentials.</p>
+
+    <p>Keys must be securely stored to prevent unauthorized access. Any compromise of these keys could lead to unauthorized usage, costs, and potential data exposure. Key rotation should be possible without service disruption. Additionally, any key management solution should be able to accommodate adding (or removing) LLM providers and securely sharing access with new team members.</p>
+
+    <h4>Our Implementation</h4>
+    <p>For Apiary, we implemented a two-tier key management strategy that balances security with usability.</p>
+
+    <p>Our provider API key management system uses AWS Secrets Manager to securely store all LLM provider API keys. Lambda functions retrieve the necessary keys when processing requests, ensuring that keys are not exposed to client applications and reducing the risk of key leakage.</p>
+
+    <p>Requests from client applications to Apiary are authenticated with a single API key issued by Apiary. Different usage plans associated with different API keys, and with varying rate limits, can be created for different clients. This approach simplifies key management for client application developers - they only need to manage a single API key, regardless of how many LLM providers are used behind the scenes. LLM providers can be added without sharing provider keys with individual developers - developers can simply use their Apiary API key. LLM provider keys can be automatically rotated in Secrets Manager, ensuring continuous application operation.</p>
+
+    <p>This approach maintains security for provider credentials while providing a simple, unified authentication mechanism for client applications.</p>
+
+    <h4>Alternatives Approaches and Tradeoffs</h4>
+    <p>It's not uncommon for teams to store API keys in a <code>.env</code> file, but we didn't consider this approach due to security risks and impracticality for production environments or team-based workflows. Another alternative was using an external tool like HashiCorp Vault, but that would introduce operational complexity and management overhead we didn't need. Given that we were already in the AWS ecosystem, Secrets Manager was a natural fit.</p>
+
+    <h3 id="managing-conversation-history">Managing Conversation History</h3>
+
+    <h4>The Challenge</h4>
+    <p>Many LLM applications require maintaining the context of ongoing conversations, or threads, which presents several challenges, the most fundamental being that each LLM request is stateless by default. When conversation history is required for context, the entire history must be provided with each request. This requires that we not only store and access the conversation history for each request, but also transform it either before storage or upon retrieval to ensure that different providers can parse it. Given that we had already addressed the issue of varying request and response structures and roles with the TokenJS library, this challenge was simplified in that respect.</p>
+
+    <p>A complication worth mentioning is that as the conversation grows, the requests to the LLMs grow in size as well, increasing the token count and associated cost. Long conversations may also lead to a loss of context, as there is an upper limit to the amount of context an LLM can support.</p>
+
+    <p>Managing threads effectively requires persistent storage, standardization across providers, and strategies for handling long-running conversations.</p>
+
+    <h4>Our Implementation Choices</h4>
+    <p>We implemented a thread management system with the following components:</p>
+    <ul>
+        <li>Each query and response is stored in a DynamoDB table</li>
+        <li>Conversations are identified by a thread ID, which can be provided by the client in the request or auto-generated based on timestamp</li>
+        <li>Standardization via our wrapped library simplified handling different provider formats and roles</li>
+        <li>Upon receiving a query with a thread ID, the table is checked for message history</li>
+        <li>Historical messages are retrieved and passed to the chat completions call for context</li>
+        <li>This approach works across providers despite their different underlying APIs</li>
+    </ul>
+
+    <p>This implementation provides thread management without requiring clients to manage conversation history themselves. The conversation context is automatically maintained and provided to each new request in the thread.</p>
+
+    <h4>Alternative Approaches and Tradeoffs</h4>
+    <p>In formulating our implementation of thread management, we considered a couple of other approaches. While exploring other model gateways, we found that Portkey has separate APIs for thread and chat completion. As users, this felt clunky and complicated to us, so we decided a single API for a chat completion, whether it's part of an ongoing conversation or not, was a better approach.</p>
+
+    <p>Another approach would have been to use each provider's thread API, where available. While this might seem like a logical fit, it would have introduced major complications. For one, not all providers offer this feature, so we would have been limited in which providers we could support. Secondly, if a conversation started with one provider, we would need to retrieve the thread history from their system and reformat it before routing the next message to another provider. This would have complicated one of our main functionalities - multi-provider routing. By managing the thread history ourselves in a normalized format, we retained control of the storage and retrieval of the conversation history and simplified cross-provider functionality.</p>
+
+    <p>In considering how to handle the effects of a thread that has grown too long, we explored several options. We could have implemented a configurable limit on thread history, either based on the number of exchanges or token count. We also discussed potential responses when that limit is reached - perhaps leveraging an LLM to summarize previous conversation content, or simply returning an error code and requiring users to start a new conversation. Ultimately, given the complexity and variety of potential use cases, we decided to delegate this responsibility to Apiary users, allowing them to implement thread management strategies that best suit their specific needs. This remains an area we're interested in developing further in future work.</p>
+
+    <h3 id="configurable-routing">Configurable Routing</h3>
+
+    <h4>The Challenge</h4>
+    <p>As we've discussed, routing requests to the appropriate LLM based on an application's specific needs is one of the paramount features of a model gateway. Thoughtful routing configuration will reduce downtime, minimize costs, create an ideal setup for development and testing, and produce better responses.</p>
+
+    <p>The primary challenge in implementing a configurable routing system stemmed from our desire for exceptional flexibility. The core difficulty lay in designing a system that could elegantly handle a multi-layered decision tree. Our routing system needed to support:</p>
+    <ul>
+        <li>Request-level provider and model specification</li>
+        <li>Configuration-level defaults</li>
+        <li>Conditional routing based on request metadata</li>
+        <li>Traffic distribution within condition groups</li>
+        <li>Multiple layers of fallback mechanisms</li>
+    </ul>
+
+    <p>The challenge wasn't simply implementing each feature in isolation, but determining the ideal flow of a request and then creating a cohesive system where these options could interact predictably. When a request enters the gateway, it triggers a cascade of routing decisions, each with its own set of rules and fallback behaviors.</p>
+
+    <div class="info-box">
+        <h4>Technical Overview</h4>
+        <p>Potential use cases of <strong>conditional routing</strong> might be to route queries with a <em>user-type</em> header of <em>pro</em>, for example, to better, more expensive models, or queries with a <em>department</em> header of <em>legal</em> to specialized models trained on contracts.</p>
+
+        <p><strong>Fallback Mechanisms</strong> are essential, as LLM services experience higher-than-typical downtime. Number of retries and status codes to fallback on are also configurable through Apiary.</p>
+
+        <p><strong>Load Balancing</strong> supports experimental needs, setting users up for canary deployments and A/B testing with no additional configuration.</p>
+    </div>
+
+    <h4>Our Implementation</h4>
+    <p>It was important to us that, in choosing to use Apiary, developers did not have to sacrifice control over request routing. We implemented a routing system with the goal of providing as much flexibility as possible.</p>
+
+    <p><strong>Configuration Object</strong>: Routing rules are defined in JSON and stored in an S3 bucket. Our default configuration file is loaded upon deployment, with the option for users to update the configuration through the UI.</p>
+
+    <p><strong>Fallback Mechanisms</strong>: The system handles transient failures through configurable automatic retries with exponential backoff. Users can specify fallback models at multiple levels (per condition and globally) and define which error status codes should trigger these fallbacks.</p>
+
+    <p><strong>Load Balancing</strong>: Our implementation supports percentage-based distribution across providers, enabling controlled rollouts through A/B testing and canary deployments.</p>
+
+    <p><strong>Granular Control</strong>: The system processes routing metadata from request headers. This creates a pathway for specialized routing needs, such as directing specific user segments to appropriate models.</p>
+
+    <p>This implementation allows for sophisticated routing strategies while maintaining a simple API for clients. The routing layer handles the complexity of provider selection, retries, and fallbacks, making these concerns transparent to the application making the request.</p>
+
+    <h4>Alternative Approaches and Tradeoffs</h4>
+    <p>When designing the routing system, we considered a couple of other options. We could have implemented a more basic approach with predetermined paths. This approach would have certainly been easier to build, but as users of model gateways ourselves, we had experienced the frustration of limited options and knew we wanted complete flexibility. Another option was to use the pre-built routing features of Amazon's API Gateway. This could have saved development time, but would have limited us with respect to implementation. We knew we would require specialized fallback logic, context-aware routing, and eventually in future developments, streaming response management, which API Gateway would not be best suited for.</p>
+
+    <h3 id="caching">Caching</h3>
+
+    <h4>The Challenge</h4>
+    <p>As discussed, common developer concerns when working with LLMs include cost and high latency, especially compared to traditional API calls. Response times can vary significantly depending on the model, the length of the input prompt and generated output (measured in tokens), and the current load on the provider's infrastructure (<a href="https://techcommunity.microsoft.com/blog/azure-ai-services-blog/the-llm-latency-guidebook-optimizing-response-times-for-genai-applications/4131994">source</a>). Tracking tools monitoring API response times regularly record latencies exceeding five seconds, even for relatively fast models like OpenAI's GPT-3.5-turbo generating outputs of up to 512 tokens (<a href="https://gptforwork.com/tools/openai-api-and-other-llm-apis-response-time-tracker">source</a>). Tracked response times increase when using more powerful models, and may increase even further when requesting longer outputs.</p>
+
+    <p>LLM pricing also varies based on the provider and model, but is generally charged based on tokens used. As of this writing, OpenAI's GPT-4.1 model - which it touts as a "model for everyday tasks" - costs $2.00 per million input tokens and $8.00 per million output tokens. o1-pro, one of OpenAI's most advanced models, costs $150.00 per million input tokens and $600.00 per million output tokens. Costs can add up even when using a cheaper model, especially for high traffic applications.</p>
+
+    <div class="info-box">
+        <h4>Technical Overview</h4>
+        <p>In a caching system, responses to prior requests can be reused, rather than calling the LLM again. In <strong>simple caching</strong>, a cached response is only returned if the request matches the previous one exactly. For example, the queries "How do bees make honey?" and "How do bees produce honey?" wouldn't be recognized by a simple cache as equivalent requests, even though it might be reasonable to return the same response in this case.</p>
+
+        <p>Despite the variability of language and relatively low likelihood of identical phrasing between requests, LLM-integrated applications can benefit greatly from a simple cache. For instance, applications with suggested pre-defined prompts, where the exact same prompt might be sent repeatedly, would result in a high number of simple cache hits. A simple cache can be particularly valuable during development, when a cached response may be preferred to avoid the token usage and latency of an LLM call.</p>
+
+        <p>In contrast, <strong>semantic caches</strong> are able to recognize the meaning of requests - so that queries like "How do bees make honey?" and "How do bees produce honey?" are identified as semantically equivalent and result in a cache hit.</p>
+
+        <p>Semantic caching uses <strong>vector embeddings</strong>, which are arrays of hundreds or thousands of numbers that represent the characteristics of a piece of data, like a sentence or a paragraph. <strong>Embedding models</strong> have been trained to convert inputs like sentences into vector embedding outputs representing the inputs' features. Embeddings can be compared using <strong>cosine similarity</strong>, a calculation that measures how similar two embeddings are to each other. The higher the cosine similarity, the more similar the embeddings. Vector embeddings can be stored in a category of databases called <strong>vector databases</strong>, which are optimized for storing and searching high-dimensional vector embeddings.</p>
+    </div>
+
+    <h4>Our Implementation</h4>
+    <p>To help mitigate the latency and costs of LLM calls, Apiary implements both simple and semantic caching. Users have the option to enable one, both, or neither of these caches, depending on their needs.</p>
+
+    <h5>Simple cache</h5>
+    <p>If both caches are enabled, Apiary checks the simple cache first. Due to its simpler nature, the simple cache is able to return a response faster than the semantic cache.</p>
+
+    <p>Apiary's simple cache uses DynamoDB, which we chose for its simplicity, single-digit millisecond response times, and easy integration with other AWS services. Requests can be cached globally or per user by including a <code>userId</code> in the request. Each entry's "sort key" is created by combining the LLM provider and model used, with the text of the user request. This accommodates cases where developers want a response to be provided by a specific provider and model due to that model's strengths in some area.</p>
+
+    <p>Cache items are automatically deleted using DynamoDB's built-in time-to-live (TTL) functionality. Developers can specify a TTL in seconds that works best for them.</p>
+
+    <h5>Semantic cache</h5>
+    <p>If no match is found in the simple cache, Apiary checks the semantic cache next. The semantic caching system follows this process:</p>
+    <ol>
+        <li>A vector embedding for the request is generated.</li>
+        <li>The embedding is compared against previously cached embeddings using cosine similarity.</li>
+        <li>If a match is found in the cache with a cosine similarity above a configurable threshold, then the cached response will be immediately returned to the user.</li>
+        <li>If no match is found above the threshold, then the request will be sent to an LLM.</li>
+        <li>When the LLM responds, its response will be stored with the embedding for the request in the vector database.</li>
+    </ol>
+
+    <p>Apiary's semantic caching system uses the Amazon Titan Text Embedding v2 model via AWS Bedrock to generate embeddings. Bedrock is fully managed and easy to integrate with other AWS services, making it a convenient choice for our infrastructure. For storing and searching embeddings, Apiary uses AWS OpenSearch vector search. OpenSearch vector search is a vector database and search tool that is also well-suited for searches that filter on metadata. This allows us to filter semantic cache hits based on userId, provider, and model, just as we do in the simple cache. The semantic cache also implements configurable TTL for cache entries.</p>
+
+    <h4>Alternative Approaches and Tradeoffs</h4>
+    <p><strong>Simple Cache</strong></p>
+    <p>Before choosing DynamoDB for our simple cache, we considered using the built-in API Gateway caching. This approach would require no additional components, but we quickly found that the functionality of this system was too limited for our needs. Making requests to LLMs requires complex prompts that are better suited for sending in the body of HTTP POST requests. The built-in API Gateway caching doesn't allow for accessing the request body. Additionally, it returns the full cached response, including fields like token usage that aren't sensical to return with a cache hit. Implementing a custom cache solution allowed us to customize the response appropriately.</p>
+
+    <p><strong>Semantic Cache</strong></p>
+    <p>For embedding generation, we considered making API calls to connect to external models (ex. from OpenAI or Anthropic), which would give us access to more options, but this would require an external network connection outside of the AWS ecosystem. We also considered running a local embedding model to avoid the external call, but this would add considerable complexity to our system.</p>
+
+    <p>For both the simple and semantic caching systems, we also considered using in-memory caches like ElastiCache or MemoryDB with vector search. While these would have faster response times (sub-millisecond for a simple cache with ElastiCache, and estimated in the low tens of milliseconds for MemoryDB with vector search - vs mid to high tens of milliseconds for OpenSearch), they would also introduce additional complexity and cost to the system. Since OpenSearch is already used elsewhere in Apiary (e.g., for guardrails), it made sense to standardize on one tool. LLM users are also accustomed to some delay, so the slightly higher latency of OpenSearch was acceptable for our use case.</p>
+
+    <h3 id="guardrails">Guardrails</h3>
+
+    <h4>The Challenge</h4>
+    <p>One difficulty when working with LLMs is that their behavior is non-deterministic. Their responses can sometimes generate inappropriate, inaccurate, or potentially harmful content. To implement some protection against undesired behavior, developers may wish to apply some variation of guardrails at one or more steps in the request and response flow. Determining where guardrails should go and how they should be implemented presented a design challenge in our pursuit to balance the linguistic strengths of an LLM with safety and consistency. To provide some context, we'll provide a technical overview of guardrails before diving into our implementation decisions.</p>
+
+    <div class="info-box">
+        <h4>Technical Overview</h4>
+        <p>Guardrails can be implemented at various "intervention levels" in an LLM application, including on the user's query, on any retrieved supplemental information (such as in a RAG), on the LLM's response, and on what is finally returned to the client. At each level, guardrails can determine whether messages should be accepted as is, filtered, modified, or rejected.</p>
+
+        <p>The main techniques for implementing guardrails include:</p>
+        <ol>
+            <li><strong>Rule-based string manipulation</strong>: These guardrails take a string as input, perform checks or string modifications, and determine the next steps. While this approach is typically fast and low-cost, language can be subtle and context-dependent, so rule-based approaches are the least robust.</li>
+            <li><strong>LLM-based metrics</strong>: These use embedding similarity metrics to estimate how similar a message is to target topics. For example, calculating the semantic similarity between user input and problematic content. This requires embedding a group of "utterances," storing them, and chunking and embedding each LLM response to analyze the semantic similarity between the response and the utterances. This approach is more restrictive, but also increases latency and cost.</li>
+            <li><strong>LLM judges</strong>: These guardrails use LLMs themselves to evaluate whether content violates guidelines. While powerful, this adds significant latency and cost to each interaction.</li>
+            <li><strong>Prompt engineering</strong>: This uses carefully designed prompts to steer the LLM away from generating problematic content. When done well, prompt engineering can be very effective, but its effectiveness is largely dependent on an LLM's capacity to accurately interpret instructions. Applications using prompt engineering alone are also susceptible to prompt injection attacks.</li>
+        </ol>
+
+        <p>In designing guardrails, developers must balance several competing factors as they fit their specific needs: maximizing the capabilities of LLMs, ensuring safety and relevance of responses, minimizing latency, and managing costs.</p>
+    </div>
+
+    <h4>Our Implementation</h4>
+    <p>As we've discussed, there are a number of factors that need to be tailored for each situation's needs. For this reason, we chose to make our guardrails system highly configurable. We designed Apiary to offer a number of options:</p>
+
+    <p><strong>Level One Guardrails: Rule-Based String Manipulation</strong></p>
+    <p>Our first tier implements simple rule-based guardrails that match LLM outputs against an array of blocked words included in the configuration object. This approach:</p>
+    <ul>
+        <li>Provides a latency impact of about 300ms</li>
+        <li>Catches obvious violations (explicit profanity, prohibited topics)</li>
+        <li>Can be easily customized with domain-specific blocklists</li>
+    </ul>
+    <p>This approach acts as a basic layer of defense, with minimal added latency and no added cost.</p>
+
+    <p><strong>Level Two Guardrails: Semantic Similarity Matching</strong></p>
+    <p>Our second tier implements more sophisticated guardrails using semantic similarity:</p>
+    <ul>
+        <li>Uses embeddings to detect semantic similarity to prohibited content</li>
+        <li>Can catch subtle violations that would bypass word-based filtering</li>
+        <li>Leverages our existing OpenSearch infrastructure for embedding storage and similarity calculations</li>
+        <li>Provides more comprehensive protection at the cost of moderately increased latency (1000ms)</li>
+    </ul>
+    <p>This technique computes semantic similarity scores between 3-sentence chunks of inputs/outputs and target problematic content, rejecting the message whenever the score exceeds a specified, configurable threshold.</p>
+
+    <p><strong>Resend On Violation</strong></p>
+    <p>For cases where guardrails detect violations, we implemented a "resend on violation" option that:</p>
+    <ul>
+        <li>Sends responses that trigger guardrails back to the LLM</li>
+        <li>Includes instructions to generate a new response that avoids the detected violation</li>
+        <li>Incorporates the "LLM judge" technique without adding latency to every request</li>
+        <li>Provides a fallback mechanism when guardrails block legitimate content</li>
+    </ul>
+    <p>As this approach requires an additional LLM call, it adds the highest amount of latency (approximately 2000ms) and cost, but it results in a much more comprehensive safety framework while still returning a useful response. Rather than simply blocking content, it adaptively regenerates responses while avoiding violations.</p>
+
+    <p><strong>No Guardrails</strong></p>
+    <p>Lastly, our guardrails are completely optional. For users who would prefer to do without any sort of guardrails, the <code>enabled</code> attribute in the <code>guardrails</code> section may be set to <code>false</code> in the configuration object.</p>
+
+    <h4>Alternative Approaches and Tradeoffs</h4>
+    <p>For the level two guardrails, our current implementation includes prompt and response content together during evaluation. While this approach maintained the context of the question (for instance, an LLM might not restate the topic at hand and simply respond with an undesired affirmation or rejection, which wouldn't be caught), it created a new challenge: if a prompt mentions prohibited content, the entire response might be blocked unnecessarily. The core challenge is striking a balance between:</p>
+    <ul>
+        <li>Not blocking valid responses that refute misinformation or discuss sensitive topics in an acceptable way</li>
+        <li>Catching harmful outputs, even if they're short ("yes") or rely heavily on context from the prompt</li>
+    </ul>
+
+    <p>We considered a few improvements to this system as opportunities for future refinement:</p>
+    <ul>
+        <li>Determine stance of the response (affirms or rejects), and only block those responses that affirm the prohibited utterances.</li>
+        <li>Add metadata to guardrails such as "block_if_affirms," "block_if_prompt_includes," or "block_if_refutes" to introduce more granular control over enforcement.</li>
+        <li>Apply different semantic similarity thresholds for prompts versus responses, with a higher threshold for prompts, or with a heavier weighting to response similarity in decision-making.</li>
+    </ul>
+
+    <p>Ultimately, we found our current guardrails system to be a good balance of safety and simplicity. With full configurability, we felt that users of Apiary could fine-tune its behavior to suit their needs.</p>
+
+    <h3 id="collecting-and-storing-observability-data">Collecting and Storing Observability Data</h3>
+
+    <h4>Short-term data</h4>
+    <p><strong>The Challenge</strong></p>
+    <p>Apiary collects data on every request passing through the system, categorizing this information into short-term and long-term logs. Short-term logs represent requests from the past 5 days. Developers require near real-time access to these logs to quickly monitor system performance and detect anomalies or errors.</p>
+
+    <p><strong>Our Implementation</strong></p>
+    <p>We chose to use AWS DynamoDB for short-term log storage. Log data naturally aligns with DynamoDB's key-value structure, allowing each request's log to be stored as a single object. Additionally, DynamoDB's single-millisecond query latency ensures developers can retrieve logs almost instantly, meeting the need for near real-time observability.</p>
+
+    <p><strong>Alternative Approaches and Tradeoffs</strong></p>
+    <p>We briefly considered using a relational database for storing short-term logs. However, relational databases introduced unnecessary complexity because our log data is self-contained within individual records. The absence of complex relational joins makes a key-value store like DynamoDB a more straightforward and efficient solution.</p>
+
+    <h4>Long-term data</h4>
+    <p><strong>The Challenge</strong></p>
+    <p>Long-term log storage presents distinct challenges, particularly around efficiently storing and querying large volumes of historical data. Unlike short-term logs, the priority shifts toward facilitating aggregate queries (e.g., calculating averages or grouping data by provider) rather than rapid individual record retrieval. Therefore, our primary considerations here were query efficiency and cost-effective storage.</p>
+
+    <div class="info-box">
+        <h4>Technical Overview</h4>
+        <p>Apache Parquet is a columnar storage format that stores data by columns rather than rows, offering significant compression advantages. Columnar compression reduces the required storage space and significantly accelerates analytical queries since irrelevant columns can be skipped during queries (<a href="https://www.databricks.com/glossary/what-is-parquet">source</a>).</p>
+
+        <p>AWS Athena, a serverless query service, enables querying data stored in Amazon S3 using standard SQL. When paired with parquet format, Athena efficiently reads only the required columns. Additionally, parquet files in S3 can be partitioned by specific columns, further optimizing queries by ensuring only necessary partitions are scanned. Bulk parquet data can be split into separate files, and Athena can run queries in parallel on those files.</p>
+    </div>
+
+    <p><strong>Our Implementation</strong></p>
+    <p>Apiary stores its long-term log data as Apache Parquet files within Amazon S3, leveraging Athena to execute queries. This approach optimizes both storage costs and query performance due to Parquet's compression and the columnar design. Athena provides the option to run optimized aggregate queries on the data through familiar SQL statements.</p>
+
+    <p><strong>Alternative Approaches and Tradeoffs</strong></p>
+    <p>An alternative that we considered was storing logs in JSON format. JSON's advantages include human readability, easy interoperability with multiple platforms and tools, and suitability for row-based querying (ideal for accessing detailed individual request data). However, JSON lacks Parquet's storage efficiency and optimized query capabilities for large-scale analytics. Given our priorities of aggregate analysis and the potential scale of log storage, Parquet's compression and aggregate query advantages were decisive factors in choosing it over JSON.</p>
+
+    <h4>Additional Considerations</h4>
+    <p>Short-term logs are periodically transferred from DynamoDB to S3 via a scheduled cron job. This transaction is not atomic - that is, if any part of the function fails then the database does not revert back to its original state. Making this process more ACID compliant is an important area for future work.</p>
+
+    <p>Additionally, the logging and routing systems are currently tightly coupled. Routing functions directly instantiate or pass logging objects to capture events (e.g., cache hits). While this provides fine-grained event tracking with minimal overhead, it may become a bottleneck under sustained high traffic (e.g., over 100 requests per second). To improve scalability and performance, we could adopt an event-driven architecture where logs are asynchronously published to a streaming service such as AWS Kinesis Data Streams or Firehose, decoupling logging from routing.</p>
+
+    <h3 id="observability-and-management-dashboard">Observability and Management Dashboard</h3>
+    <p>Apiary includes an observability dashboard which allows developers to toggle between viewing short-term and long-term logs. The dashboard fetches logs from DynamoDB (for short-term logs) or Athena query (for long-term logs). The UI is implemented in React and hosted via S3 Static Website Hosting service.</p>
+
+    <p>The dashboard also serves as a management hub where users can configure routing logic and guardrails. We considered different options for where to implement this "management hub" - for example by having users pass a configuration object in the SDK, or via CLI commands. Ultimately we felt that the dashboard UI was the most user-friendly option, where we could provide the most intuitive editing interface along with guidance on entering a valid configuration object.</p>
+</section>

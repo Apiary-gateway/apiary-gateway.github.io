@@ -1,0 +1,36 @@
+---
+
+---
+
+<section id="existing-solutions">
+  <h2>Existing Solutions</h2>
+
+  <p>Before building Apiary, we researched existing tools and platforms that tackle LLM integration and related problems. It turns out this is a new and rapidly developing field, and while there were some promising solutions, none quite met our exact needs. In this section, we'll discuss a few categories of existing solutions, their pros and cons, and why we ultimately decided to create Apiary.</p>
+
+  <h3 id="existing-solutions-overview">Overview</h3>
+
+  <p>One option to address the difficulties in integrating LLMs into an application is to build your own model gateway from scratch. This do-it-yourself approach offers maximum control and flexibility. You decide exactly how requests are routed, how conversation history is managed, which features to incorporate (caching, retries, guardrails) and how. However, this level of control comes with a cost. Effort is required upfront to build it, and ongoing work is required to maintain it as providers update their APIs, new models come out, and your own requirements change.</p>
+
+  <p>In the open-source space, tools such as LiteLLM and Portkey are available. LiteLLM offers a unified API to interact with multiple LLM providers, taking care of the request and response standardization for you. Notably, neither deployment infrastructure nor monitoring architecture are offered by LiteLLM. Portkey offers a similar product with more infrastructure components, including a dashboard for analytics and monitoring and data storage for usage metrics. Portkey's free plan excludes a number of features that we desired, including semantic caching, semantic guardrails, and long-term log retention.</p>
+
+  <p>We examined two commercial gateway solutions as well. Cloudflare AI Gateway and Gloo AI Gateway both offer a wide range of features, including request standardization, routing, simple caching, and functional interfaces for usage monitoring. Managed services eliminate the need to build infrastructure components, providing pre-configured environments that handle deployment, scaling, and monitoring.</p>
+
+  <h3 id="existing-solutions-tradeoffs">Tradeoffs</h3>
+
+  <h4>Cost vs. Effort</h4>
+  <p>Commercial solutions are the most expensive, but they may offer a complete solution to the issues raised. These platforms provide immediate advantages with low effort.</p>
+
+  <p>Open-source alternatives provide a compromise in terms of effort. They avoid recurring fees, but may take longer to learn and develop than a fully managed solution.</p>
+
+  <p>Despite appearing to have the lowest direct costs, the do-it-yourself approach necessitates the largest time and resource commitment for development. Designing and implementing a custom solution takes a large amount of engineering time up front, and also requires ongoing maintenance as needs change and LLM APIs evolve.</p>
+
+  <h4>Control vs. Convenience</h4>
+  <p>Although managed services lessen the operational load, users do not have full control over their data, which may raise security and privacy concerns. For businesses operating in regulated industries or with strict data governance requirements, this trade-off is especially important.</p>
+
+  <p>Additionally, adopting a managed service means less control over available third-party integrations and potential vendor lock-in. Building a solution or adopting open-source alternatives provides more control, but increases maintenance responsibilities.</p>
+
+  <h4>Feature Limitations</h4>
+  <p>Advanced features like semantic caching, comprehensive observability, or guardrailing capabilities are not available in many solutions. With the adoption of a managed solution, there may be limitations on what additional features can be incorporated. While it is possible to modify open-source libraries, doing so necessitates a substantial amount of development work, codebase knowledge, and maintenance overhead. This is where the DIY approach shines, as it offers full feature flexibility, again at the cost of development time.</p>
+
+  <p>Recognizing that some users require the control, flexibility, and low direct cost of the DIY approach with the minimal effort of the commercial offerings, we developed Apiary as an alternative.</p>
+</section>

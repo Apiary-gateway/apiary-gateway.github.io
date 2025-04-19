@@ -2,8 +2,11 @@
 import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Introduction from '../content/case-study/introduction.astro';
-import Research from '../content/case-study/research.astro';
-import Design from '../content/case-study/design.astro';
+import Background from '../content/case-study/background.astro';
+import ExistingSolutions from '../content/case-study/existing-solutions.astro';
+import OurSolution from '../content/case-study/our-solution.astro';
+import BuildingApiary from '../content/case-study/building-apiary.astro';
+import FutureWork from '../content/case-study/future-work.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -12,53 +15,134 @@ const headings = [
     title: "Introduction",
     children: [
       {
-        id: "overview",
+        id: "what-is-apiary",
+        title: "What is Apiary"
+      },
+    ]
+  },
+  {
+    id: "background",
+    title: "Background",
+    children: [
+      {
+        id: "foundation-models",
+        title: "Foundation Models and Model-as-a-Service"
+      },
+      {
+        id: "challenges",
+        title: "Challenges of Working with LLMs"
+      },
+      {
+        id: "multiple-llms",
+        title: "Why Use Multiple LLMs?"
+      },
+      {
+        id: "abstraction",
+        title: "A New Layer of Abstraction"
+      }
+    ]
+  },
+  {
+    id: "existing-solutions",
+    title: "Existing Solutions",
+    children: [
+      {
+        id: "existing-solutions-overview",
         title: "Overview"
       },
       {
-        id: "problem-statement",
-        title: "Problem Statement"
+        id: "existing-solutions-tradeoffs",
+        title: "Tradeoffs"
       }
     ]
   },
   {
-    id: "research",
-    title: "Research",
+    id: "our-solution",
+    title: "Our Solution",
     children: [
       {
-        id: "user-research",
-        title: "User Research"
+        id: "differentiators",
+        title: "Differentiators"
       },
       {
-        id: "market-analysis",
-        title: "Market Analysis"
+        id: "who-apiary-is-for",
+        title: "Who Apiary Is For"
+      },
+      {
+        id: "using-apiary",
+        title: "Using Apiary"
       }
     ]
   },
   {
-    id: "design",
-    title: "Design",
+    id: "building-apiary",
+    title: "Building Apiary",
     children: [
       {
-        id: "wireframes",
-        title: "Wireframes"
+        id: "serverless-architecture",
+        title: "Serverless Architecture"
       },
       {
-        id: "prototypes",
-        title: "Prototypes"
+        id: "request-response-transformation",
+        title: "Request/Response Transformation"
+      },
+      {
+        id: "api-key-management",
+        title: "API Key Management"
+      },
+      {
+        id: "managing-conversation-history",
+        title: "Managing Conversation History"
+      },
+      {
+        id: "configurable-routing",
+        title: "Configurable Routing"
+      },
+      {
+        id: "caching",
+        title: "Caching"
+      },
+      {
+        id: "guardrails",
+        title: "Guardrails"
+      },
+      {
+        id: "collecting-and-storing-observability-data",
+        title: "Collecting and Storing Observability Data"
+      },
+      {
+        id: "observability-and-management-dashboard",
+        title: "Observability and Management Dashboard"
+      }
+    ]
+  },
+  {
+    id: "future-work",
+    title: "Future Work",
+    children: [
+      {
+        id: "improving-resiliency",
+        title: "Improving Resiliency"
+      },
+      {
+        id: "user-querying",
+        title: "User Querying"
+      },
+      {
+        id: "optimizing-latency",
+        title: "Optimizing Latency"
+      },
+      {
+        id: "conversation-management",
+        title: "Conversation Management"
+      },
+      {
+        id: "additional-guardrail-features",
+        title: "Additional Guardrail Features"
       }
     ]
   }
 ];
-
-// Helper: Build child image map
-function extractChildImages(children = []) {
-  return Object.fromEntries(
-    children
-      .filter((child) => child.img)
-      .map((child) => [child.id, child.img])
-  );
-}
 ---
 
 <BaseLayout>
@@ -67,8 +151,11 @@ function extractChildImages(children = []) {
       {headings.map(({ id }) => (
         <>
           {id === 'introduction' && <Introduction />}
-          {id === 'research' && <Research />}
-          {id === 'design' && <Design />}
+          {id === 'background' && <Background />}
+          {id === 'existing-solutions' && <ExistingSolutions />}
+          {id === 'our-solution' && <OurSolution />}
+          {id === 'building-apiary' && <BuildingApiary />}
+          {id === 'future-work' && <FutureWork />}
         </>
       ))}
     </slot>

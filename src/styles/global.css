@@ -1,16 +1,21 @@
 /* src/styles/global.css */
 :root {
   /* Color Palette */
-  --color-primary: #2563eb;
+  --color-primary: #45a049;
   --color-primary-light: #3b82f6;
   --color-primary-dark: #1d4ed8;
   --color-background: #ffffff;
   --color-background-light: #f8fafc;
-  --color-text: #1e293b;
+  --color-background-alt: #f1f5f9; /* Light mode info-box background */
+  --color-text: #333333;
   --color-text-secondary: #64748b;
-  --color-border: #e2e8f0;
+  --color-border: #e0e0e0;
   --color-navbar: #ffffff;
-  --color-navbar-border: #e2e8f0;
+  --color-navbar-border: #e0e0e0;
+  --navbar-bg: #ffffff;
+  --navbar-border: #e0e0e0;
+  --text-primary: #333333;
+  --primary-color: #45a049;
 
   /* Section Colors */
   --section-background: #ffffff;
@@ -53,16 +58,21 @@
 }
 
 [data-theme='dark'] {
-  --color-primary: #3b82f6;
+  --color-primary: #4caf50;
   --color-primary-light: #60a5fa;
   --color-primary-dark: #2563eb;
   --color-background: #1a1a1a;
   --color-background-light: #2d2d2d;
-  --color-text: #f8fafc;
+  --color-background-alt: #242424; /* Dark mode info-box background - slightly lighter than main background */
+  --color-text: #ffffff;
   --color-text-secondary: #94a3b8;
   --color-border: #404040;
   --color-navbar: #1a1a1a;
   --color-navbar-border: #404040;
+  --navbar-bg: #1a1a1a;
+  --navbar-border: #2d2d2d;
+  --text-primary: #ffffff;
+  --primary-color: #4caf50;
 
   /* Section Colors - Dark Mode */
   --section-background: #1a1a1a;

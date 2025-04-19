@@ -1,0 +1,68 @@
+---
+
+---
+
+<section id="background">
+    <h2>Background</h2>
+
+    <p>Before further exploring the services that Apiary provides, it may be helpful to have more background on how LLMs may be used in applications and the challenges that can arise when integrating one or more LLMs. </p>
+
+    <h3 id="foundation-models">Foundation Models and Model-as-a-Service</h3>
+
+    <p>A foundation model, such as OpenAI's GPT-4, Anthropic's Claude, and Google's Gemini, is a general purpose AI model trained on large amounts of data and exposed via an API, enabling developers to integrate advanced AI capabilities into their applications.</p>
+
+    <p>Typically, access to these models is provided via API calls to commercial Model-as-a-Service (MaaS) offerings. In some cases, such as when data privacy or intellectual property is a concern, these models are self-hosted.</p>
+
+    <p>Foundation models are used for a wide variety of AI features in applications. Some common examples include:</p>
+
+    <ul>
+        <li>Retrieval-Augmented Generation (RAG) and custom chatbots</li>
+        <li>Summarization of content such as documents, customer reviews, or academic papers</li>
+        <li>Text generation, including product descriptions and blog posts</li>
+        <li>Semantic search, using embeddings to retrieve and rank relevant documents</li>
+        <li>Visual comprehension, such as image generation and identification</li>
+        <li>Multi-modal systems, which are a combination of the above capabilities</li>
+    </ul>
+
+    <p>It's not uncommon for a single application to employ several of these use cases. Even the simplest AI application often involves multiple LLM calls - it may employ an LLM for classification of a query, as well as an embedding model to retrieve relevant documents, plus an LLM for the response generation, and finally a model for response evaluation. Integrating even one of these LLMs comes with complexity, which we'll discuss next.</p>
+    
+    <h3 id="challenges">Challenges of Working with LLMs</h3>
+
+    <p>Working with LLMs has its own unique challenges:</p>
+
+    <ul>
+        <li><strong>Cost:</strong> API calls to LLMs can be expensive, especially for high-usage applications or lengthy queries.</li>
+        <li><strong>High Latency:</strong> LLMs are typically slower than traditional services, particularly with large prompts or responses.</li>
+        <li><strong>Unpredictability:</strong> LLMs are inherently non-deterministic and have the potential to generate undesirable responses, possibly exposing sensitive data, hallucinating information, or providing malicious content.</li>
+        <li><strong>Availability:</strong> Leading models frequently experience downtime or degraded performance, often below the industry standard for high-availability systems.</li>
+        <li><strong>Context Management:</strong> For chat applications, maintaining state and message history across requests adds a layer of complexity.</li>
+    </ul>
+
+    <p>As we discussed, even a simple AI application may have a need for using multiple LLMs. Before we get into the challenges of integrating more than one LLM into an application, we'll elaborate on some additional scenarios where more than one LLM may be necessary.</p>
+
+    <h3 id="multiple-llms">Why Use Multiple LLMs?</h3>
+
+    <h4>Performance and Cost Optimization</h4>
+
+    <p>LLMs vary widely in price, performance, and behavior. A developer might route high-priority or complex tasks to a more powerful (and more expensive) model, while using smaller, open-source models for simpler or lower-stakes queries.</p>
+
+    <p>For instance, Anthropic's Claude might be used for its natural, human-like writing style, while an open-source model may suffice for straightforward classification tasks. A chatbot for a car dealership might use a cheap, fast model to answer "What are your store hours?" and a more advanced model for "What would my monthly payment be if I finance this car over 4 years with $4,500 down?"</p>
+
+    <h4>Reliability and Fallbacks</h4>
+
+    <p>LLMs often fall short of enterprise reliability standards (e.g., "five nines" or 99.999% uptime). GPT-4 and Claude models, for example, typically offer only 99.2–99.7% availability (<a href="https://status.openai.com/">source</a>, <a href="https://status.anthropic.com/">source</a>). In high-availability applications, developers must implement fallback strategies using alternative models to ensure uninterrupted service.</p>
+
+    <h4>Performance Evaluation and Testing</h4>
+
+    <p>During development or experimentation, teams often compare responses from different models to determine which performs best. In production, multiple models may be used simultaneously in A/B tests or canary deployments to evaluate response quality, bias, or relevance.</p>
+
+    <p>"LLM as a judge", where a separate model evaluates the performance of a primary model, has also emerged as a highly popular way to evaluate LLM responses (<a href="https://blog.langchain.dev/langchain-state-of-ai-2023/">source</a>).</p>
+
+    <h4>Data Sensitivity and Internal Processing</h4>
+
+    <p>Some organizations, especially in regulated industries, need to handle sensitive data internally. This may mean routing certain queries through self-hosted or internal models before allowing access to external APIs.</p>
+
+    <h3 id="abstraction">A New Layer of Abstraction</h3>
+
+    <p>These challenges aren't going away. If anything, they're growing as LLMs are integrated into more and more applications. Rather than continuing to patch and duplicate logic across every integration, developers need a centralized layer to manage and abstract LLM interactions. This is where a <strong>model gateway</strong> comes in - a centralized layer that abstracts away the mess of LLM-integrated development. In the next section, we'll look at how existing tools attempt to solve this problem.</p>
+</section>

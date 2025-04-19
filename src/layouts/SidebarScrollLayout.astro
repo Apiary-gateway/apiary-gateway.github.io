@@ -108,23 +108,23 @@ const { children, headings } = Astro.props;
   .toc-list,
   .toc-sublist {
     list-style: none;
-    padding-left: 0;
+    padding-left: 1.5rem;
     margin-top: 0;
   }
 
   .toc-sublist {
-    margin-left: 1rem;
-    padding-left: 1rem;
+    margin-left: 0.5rem;
+    padding-left: 0.75rem;
   }
 
   .toc-link {
     display: block;
-    padding: 0.35rem 0.75rem;
+    padding: 0.25rem 0.75rem;
     color: var(--color-text);
     font-size: 1rem;
     text-decoration: none;
     transition: color 0.2s ease;
-    white-space: nowrap;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -146,8 +146,8 @@ const { children, headings } = Astro.props;
   }
 
   :global(.content-wrapper h2) {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
     color: var(--color-text);
     font-size: 2rem;
     font-weight: 600;
@@ -156,8 +156,8 @@ const { children, headings } = Astro.props;
   }
 
   :global(.content-wrapper h3) {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: 1.75rem;
+    margin-bottom: 1.25rem;
     color: var(--color-text);
     font-size: 1.5rem;
     font-weight: 500;
@@ -165,8 +165,26 @@ const { children, headings } = Astro.props;
     scroll-margin-top: 6rem;
   }
 
-  :global(.content-wrapper p) {
+  :global(.content-wrapper h4) {
+    margin-top: 1.5rem;
     margin-bottom: 1rem;
+    color: var(--color-text);
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  :global(.content-wrapper h5) {
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  :global(.content-wrapper p) {
+    margin-bottom: 1.25rem;
     line-height: 1.8;
     color: var(--color-text);
     text-align: justify;
@@ -185,12 +203,74 @@ const { children, headings } = Astro.props;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
+  :global(.content-wrapper ul) {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  :global(.content-wrapper ol) {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+
   /* Section spacing */
   :global(.content-wrapper section) {
     padding-top: 0.5rem;
     margin-top: 0rem;
     margin-bottom: 0rem;
     padding-bottom: 0.5rem;
+  }
+
+  :global(.content-wrapper .info-box) {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0.75rem;
+    background-color: var(--color-background-alt);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  :global(.content-wrapper .info-box h4) {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  :global(.content-wrapper .info-box p) {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  :global(.content-wrapper .info-box p:last-child) {
+    margin-bottom: 0;
+  }
+
+  :global(.content-wrapper .info-box code) {
+    background-color: var(--color-background);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
+
+  :global(.content-wrapper .info-box ul) {
+    margin-left: 1.5rem;
+    padding-left: 0;
+  }
+
+  :global(.content-wrapper .info-box li) {
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.content-wrapper .info-box li:last-child) {
+    margin-bottom: 0;
   }
 
   @media (max-width: 1024px) {
@@ -222,14 +302,26 @@ const { children, headings } = Astro.props;
 
     :global(.content-wrapper h2) {
       font-size: 1.75rem;
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      margin-top: 1.75rem;
+      margin-bottom: 1.25rem;
     }
 
     :global(.content-wrapper h3) {
-      font-size: 1.25rem;
-      margin-top: 1rem;
+      font-size: 1.5rem;
+      margin-top: 1.5rem;
       margin-bottom: 1rem;
+    }
+
+    :global(.content-wrapper h4) {
+      font-size: 1.25rem;
+      margin-top: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    :global(.content-wrapper h5) {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     :global(.content-wrapper p) {
@@ -239,6 +331,13 @@ const { children, headings } = Astro.props;
 
     :global(.content-wrapper img) {
       max-width: 100%;
+    }
+
+    :global(.content-wrapper .info-box) {
+      width: 90%;
+      margin: 2.5rem auto;
+      padding: 1.5em 2em;
+      border-radius: 0.5rem;
     }
   }
 
@@ -304,7 +403,7 @@ const { children, headings } = Astro.props;
       const targetId = this.getAttribute('href');
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
-        const headerOffset = 100; // Increased offset
+        const headerOffset = 100; // Increased offset for better spacing
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -312,6 +411,9 @@ const { children, headings } = Astro.props;
           top: offsetPosition,
           behavior: 'smooth'
         });
+
+        // Update URL without triggering scroll
+        history.pushState(null, '', targetId);
       }
     });
   });
@@ -320,17 +422,20 @@ const { children, headings } = Astro.props;
   document.addEventListener('DOMContentLoaded', () => {
     const hash = window.location.hash;
     if (hash) {
-      const targetElement = document.querySelector(hash);
-      if (targetElement) {
-        const headerOffset = 100; // Same offset as above
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      // Small delay to ensure all content is loaded
+      setTimeout(() => {
+        const targetElement = document.querySelector(hash);
+        if (targetElement) {
+          const headerOffset = 100; // Same offset as above
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
     }
   });
 </script>

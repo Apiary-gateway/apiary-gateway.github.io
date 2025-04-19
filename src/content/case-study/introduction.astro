@@ -2,51 +2,18 @@
 import Image from '../../components/Image.astro';
 
 const images = {
-  main: "/images/homepage-img1.jpg",
-  overview: "/images/homepage-img1.jpg",
-  problemStatement: "/images/homepage-img1.jpg"
+  overview: "/images/01-overview.png",
 };
 ---
 
 <section id="introduction">
     <h2>Introduction</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    
-    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-    <Image 
-      src={images.main} 
-      alt="Introduction Image"
-      width="80%"
-      caption="Main project overview showing the key features and interface"
-    />
+    <h3 id="what-is-apiary">What is Apiary</h3>
 
-    <h3 id="overview">Overview</h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>Apiary is an open-source platform for managing requests to one or more large language models (LLMs) via a single API endpoint. Under the hood it can route requests to different LLMs, cache and reuse results, and apply “guardrails” to model outputs. Additionally,  it provides observability for every LLM call, allowing developers to view all of their applications’ LLM requests, responses, and costs in one central location.</p>
 
-    <Image 
-      src={images.overview} 
-      alt="Project Overview Image"
-      caption="Detailed view of the project's main components and architecture"
-    />
+    <p>Developers can experiment and take advantage of the strengths of different models for different use cases within their applications, without having to manage multiple API formats or duplicate infrastructure for shared concerns like routing or guardrails.</p>
 
-    <h3 id="problem-statement">Problem Statement</h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-    <Image 
-      src={images.problemStatement} 
-      alt="Problem Statement Image"
-      width="80%"
-      caption="Visual representation of the core problem we aimed to solve"
-    />
+    <Image src={images.overview} alt="Apiary Overview" caption="Apiary Overview"/>
 </section>
-
-<style>
-    .content-image {
-        max-width: 80%;
-        margin: 2rem auto;
-        display: block;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-</style> 
