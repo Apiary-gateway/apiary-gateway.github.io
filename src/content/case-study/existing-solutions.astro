@@ -7,7 +7,7 @@
 
   <p>Before building Apiary, we researched existing tools and platforms that tackle LLM integration and related problems. It turns out this is a new and rapidly developing field, and while there were some promising solutions, none quite met our exact needs. In this section, we'll discuss a few categories of existing solutions, their pros and cons, and why we ultimately decided to create Apiary.</p>
 
-  <h3 id="overview">Overview</h3>
+  <h3 id="existing-solutions-overview">Overview</h3>
 
   <p>One option to address the difficulties in integrating LLMs into an application is to build your own model gateway from scratch. This do-it-yourself approach offers maximum control and flexibility. You decide exactly how requests are routed, how conversation history is managed, which features to incorporate (caching, retries, guardrails) and how. However, this level of control comes with a cost. Effort is required upfront to build it, and ongoing work is required to maintain it as providers update their APIs, new models come out, and your own requirements change.</p>
 
@@ -15,7 +15,7 @@
 
   <p>We examined two commercial gateway solutions as well. Cloudflare AI Gateway and Gloo AI Gateway both offer a wide range of features, including request standardization, routing, simple caching, and functional interfaces for usage monitoring. Managed services eliminate the need to build infrastructure components, providing pre-configured environments that handle deployment, scaling, and monitoring.</p>
 
-  <h3 id="tradeoffs">Tradeoffs</h3>
+  <h3 id="existing-solutions-tradeoffs">Tradeoffs</h3>
 
   <h4>Cost vs. Effort</h4>
   <p>Commercial solutions are the most expensive, but they may offer a complete solution to the issues raised. These platforms provide immediate advantages with low effort.</p>
