@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Introduction from '../content/case-study/introduction.astro';
 import Background from '../content/case-study/background.astro';
 import ExistingSolutions from '../content/case-study/existing-solutions.astro';
+import OurSolution from '../content/case-study/our-solution.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -52,6 +53,24 @@ const headings = [
         title: "Tradeoffs"
       }
     ]
+  },
+  {
+    id: "our-solution",
+    title: "Our Solution",
+    children: [
+      {
+        id: "differentiators",
+        title: "Differentiators"
+      },
+      {
+        id: "target-audience",
+        title: "Who Apiary Is For"
+      },
+      {
+        id: "getting-started",
+        title: "Using Apiary"
+      }
+    ]
   }
 ];
 
@@ -73,6 +92,7 @@ function extractChildImages(children = []) {
           {id === 'introduction' && <Introduction />}
           {id === 'background' && <Background />}
           {id === 'existing-solutions' && <ExistingSolutions />}
+          {id === 'our-solution' && <OurSolution />}
         </>
       ))}
     </slot>
