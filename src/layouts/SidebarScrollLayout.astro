@@ -205,6 +205,53 @@ const { children, headings } = Astro.props;
     padding-bottom: 0.5rem;
   }
 
+  :global(.content-wrapper .info-box) {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0.75rem;
+    background-color: var(--color-background-alt);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  :global(.content-wrapper .info-box h4) {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  :global(.content-wrapper .info-box p) {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  :global(.content-wrapper .info-box p:last-child) {
+    margin-bottom: 0;
+  }
+
+  :global(.content-wrapper .info-box code) {
+    background-color: var(--color-background);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
+
+  :global(.content-wrapper .info-box ul) {
+    margin-left: 1.5rem;
+    padding-left: 0;
+  }
+
+  :global(.content-wrapper .info-box li) {
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.content-wrapper .info-box li:last-child) {
+    margin-bottom: 0;
+  }
+
   @media (max-width: 1024px) {
     .layout {
       flex-direction: column;
