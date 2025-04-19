@@ -1,6 +1,11 @@
 ---
 import Image from '../../components/Image.astro';
-const { img, childImages } = Astro.props;
+
+const images = {
+  main: "/images/homepage-img1.jpg",
+  wireframes: "/images/homepage-img1.jpg",
+  prototypes: "/images/homepage-img1.jpg"
+};
 ---
 
 <section id="design">
@@ -9,17 +14,17 @@ const { img, childImages } = Astro.props;
     
     <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-    <Image src={img} alt="Design Image" size="large" />
+    <Image src={images.main} alt="Design Image" />
 
     <h3 id="wireframes">Wireframes</h3>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
-    <Image src={childImages?.wireframes} alt="Wireframes Image" size="large" />
+    <Image src={images.wireframes} alt="Wireframes Image" />
 
     <h3 id="prototypes">Prototypes</h3>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
-    <Image src={childImages?.prototypes} alt="Prototypes Image" size="large" />
+    <Image src={images.prototypes} alt="Prototypes Image" />
 </section>
 
 <style>

@@ -2,25 +2,19 @@
 interface Props {
   src: string;
   alt: string;
-  size?: 'small' | 'medium' | 'large' | 'full';
+  height?: string;
   caption?: string;
 }
 
-const { src, alt, size = 'medium', caption } = Astro.props;
-
-const sizeClasses = {
-  small: 'max-w-[400px]',
-  medium: 'max-w-[600px]',
-  large: 'max-w-[800px]',
-  full: 'max-w-full'
-};
+const { src, alt, height = 'auto', caption } = Astro.props;
 ---
 
 <figure class="my-8">
   <img
     src={src}
     alt={alt}
-    class={`${sizeClasses[size]} mx-auto rounded-lg shadow-md`}
+    class="w-full mx-auto rounded-lg shadow-md"
+    style={`height: ${height};`}
     loading="lazy"
   />
   {caption && (

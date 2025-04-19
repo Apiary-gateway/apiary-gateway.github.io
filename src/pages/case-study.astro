@@ -10,51 +10,42 @@ const headings = [
   {
     id: "introduction",
     title: "Introduction",
-    img: "/images/homepage-img1.jpg",
     children: [
       {
         id: "overview",
-        title: "Overview",
-        img: "/images/homepage-img1.jpg"
+        title: "Overview"
       },
       {
         id: "problem-statement",
-        title: "Problem Statement",
-        img: "/images/homepage-img1.jpg"
+        title: "Problem Statement"
       }
     ]
   },
   {
     id: "research",
     title: "Research",
-    img: "/images/homepage-img1.jpg",
     children: [
       {
         id: "user-research",
-        title: "User Research",
-        img: "/images/homepage-img1.jpg"
+        title: "User Research"
       },
       {
         id: "market-analysis",
-        title: "Market Analysis",
-        img: "/images/homepage-img1.jpg"
+        title: "Market Analysis"
       }
     ]
   },
   {
     id: "design",
     title: "Design",
-    img: "/images/homepage-img1.jpg",
     children: [
       {
         id: "wireframes",
-        title: "Wireframes",
-        img: "/images/homepage-img1.jpg"
+        title: "Wireframes"
       },
       {
         id: "prototypes",
-        title: "Prototypes",
-        img: "/images/homepage-img1.jpg"
+        title: "Prototypes"
       }
     ]
   }
@@ -73,16 +64,13 @@ function extractChildImages(children = []) {
 <BaseLayout>
   <SidebarScrollLayout headings={headings}>
     <slot>
-      {headings.map(({ id, img, children }) => {
-        const childImages = extractChildImages(children);
-        return (
-          <>
-            {id === 'introduction' && <Introduction img={img} childImages={childImages} />}
-            {id === 'research' && <Research img={img} childImages={childImages} />}
-            {id === 'design' && <Design img={img} childImages={childImages} />}
-          </>
-        );
-      })}
+      {headings.map(({ id }) => (
+        <>
+          {id === 'introduction' && <Introduction />}
+          {id === 'research' && <Research />}
+          {id === 'design' && <Design />}
+        </>
+      ))}
     </slot>
   </SidebarScrollLayout>
 </BaseLayout>
