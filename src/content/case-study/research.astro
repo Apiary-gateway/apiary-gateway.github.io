@@ -1,24 +1,25 @@
 ---
+import Image from '../../components/Image.astro';
 const { img, childImages } = Astro.props;
 ---
 
-<section>
+<section id="research">
     <h2>Research</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     
     <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-    <img src={img} alt="Research Image" class="content-image" />
+    <Image src={img} alt="Research Image" size="large" />
 
-    <h3>User Research</h3>
+    <h3 id="user-research">User Research</h3>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
-    <img src={childImages?.['user-research']} alt="User Research Image" class="content-image" />
+    <Image src={childImages?.['user-research']} alt="User Research Image" size="large" />
 
-    <h3>Market Analysis</h3>
+    <h3 id="market-analysis">Market Analysis</h3>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
-    <img src={childImages?.['market-analysis']} alt="Market Analysis Image" class="content-image" />
+    <Image src={childImages?.['market-analysis']} alt="Market Analysis Image" size="large" />
 </section>
 
 <style>
