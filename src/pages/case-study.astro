@@ -1,25 +1,74 @@
 ---
 import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import mdxConfig from '../mdx.config.js';
 
+// Define the structure of your case study content
 const headings = [
   {
     id: "introduction",
     title: "Introduction",
-    img: "/images/intro.png"
+    img: "/images/homepage-img1.jpg",
+    children: [
+      {
+        id: "overview",
+        title: "Overview",
+        img: "/images/homepage-img1.jpg"
+      },
+      {
+        id: "problem-statement",
+        title: "Problem Statement",
+        img: "/images/homepage-img1.jpg"
+      }
+    ]
+  },
+  {
+    id: "research",
+    title: "Research",
+    img: "/images/homepage-img1.jpg",
+    children: [
+      {
+        id: "user-research",
+        title: "User Research",
+        img: "/images/homepage-img1.jpg"
+      },
+      {
+        id: "market-analysis",
+        title: "Market Analysis",
+        img: "/images/homepage-img1.jpg"
+      }
+    ]
+  },
+  {
+    id: "design",
+    title: "Design",
+    img: "/images/homepage-img1.jpg",
+    children: [
+      {
+        id: "wireframes",
+        title: "Wireframes",
+        img: "/images/homepage-img1.jpg"
+      },
+      {
+        id: "prototypes",
+        title: "Prototypes",
+        img: "/images/homepage-img1.jpg"
+      }
+    ]
   }
 ];
-
-// Debug: Log headings
-console.log('Headings:', headings);
 
 // Dynamically import all content from content/case-study directory
 const sectionComponents = Object.fromEntries(
   await Promise.all(
-    headings.map(async ({ id }) => {
+    headings.flatMap(section => [
+      [section.id, import(`../content/case-study/${section.id}.mdx`)],
+      ...(section.children || []).map(child => 
+        [child.id, import(`../content/case-study/${child.id}.mdx`)]
+      )
+    ]).map(async ([id, importPromise]) => {
       try {
-        const module = await import(`../content/case-study/${id}.mdx`);
-        console.log(`Loaded MDX for ${id}:`, module.default);
+        const module = await importPromise;
         return [id, module.default];
       } catch (error) {
         console.error(`Error loading MDX for ${id}:`, error);
@@ -28,9 +77,6 @@ const sectionComponents = Object.fromEntries(
     })
   )
 );
-
-// Debug: Log section components
-console.log('Section Components:', sectionComponents);
 
 // Helper: Build child image map
 function extractChildImages(children = []) {
@@ -48,13 +94,26 @@ function extractChildImages(children = []) {
       {headings.map(({ id, img, children }) => {
         const Component = sectionComponents[id];
         const childImages = extractChildImages(children);
-        console.log(`Rendering section ${id}:`, { Component, img, childImages });
         return Component ? (
           <div class="section-content" id={id}>
-            <Component img={img} childImages={childImages} />
+            <div class="content-wrapper">
+              <Component components={mdxConfig.components} img={img} childImages={childImages} />
+            </div>
           </div>
         ) : null;
       })}
+      {headings.flatMap(({ children = [] }) => 
+        children.map(({ id, img }) => {
+          const Component = sectionComponents[id];
+          return Component ? (
+            <div class="section-content" id={id}>
+              <div class="content-wrapper">
+                <Component components={mdxConfig.components} img={img} />
+              </div>
+            </div>
+          ) : null;
+        })
+      )}
     </slot>
   </SidebarScrollLayout>
 </BaseLayout>
@@ -62,8 +121,65 @@ function extractChildImages(children = []) {
 <style>
   .section-content {
     padding: 2rem;
+    width: 100%;
+    background-color: inherit;
+  }
+
+  .content-wrapper {
     max-width: 800px;
     margin: 0 auto;
-    background-color: inherit; /* Add background to make content visible */
+    width: 100%;
+  }
+
+  .section-content img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 2rem auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    object-fit: contain;
+  }
+
+  .section-content h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-text);
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .section-content h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  .section-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 1.5rem;
+    }
+
+    .content-wrapper {
+      max-width: 100%;
+    }
+
+    .section-content h2 {
+      font-size: 1.75rem;
+      margin-top: 2rem;
+    }
+
+    .section-content h3 {
+      font-size: 1.25rem;
+    }
   }
 </style>

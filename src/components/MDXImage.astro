@@ -1,0 +1,36 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<figure class="mdx-image">
+  <img src={src} alt={alt} />
+  {alt && <figcaption>{alt}</figcaption>}
+</figure>
+
+<style>
+  .mdx-image {
+    margin: 2rem auto;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .mdx-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .mdx-image figcaption {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+</style> 
