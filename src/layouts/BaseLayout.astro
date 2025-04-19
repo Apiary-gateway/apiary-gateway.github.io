@@ -1,7 +1,6 @@
 ---
 // src/layouts/BaseLayout.astro
 import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 ---
 
@@ -18,14 +17,13 @@ import '../styles/global.css';
     <main class="main-content">
       <slot />
     </main>
-    <Footer />
   </body>
 </html>
 
 <style>
   .main-content {
     padding-top: 5rem; /* Account for fixed navbar height */
-    min-height: calc(100vh - 5rem - 10rem); /* Viewport height minus navbar and footer */
+    min-height: calc(100vh - 5rem); /* Viewport height minus navbar only */
   }
 </style>
 
