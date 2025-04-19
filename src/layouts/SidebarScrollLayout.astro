@@ -108,7 +108,7 @@ const { children, headings } = Astro.props;
   .toc-list,
   .toc-sublist {
     list-style: none;
-    padding-left: 0;
+    padding-left: 2rem;
     margin-top: 0;
   }
 
@@ -124,7 +124,7 @@ const { children, headings } = Astro.props;
     font-size: 1rem;
     text-decoration: none;
     transition: color 0.2s ease;
-    white-space: nowrap;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -183,6 +183,12 @@ const { children, headings } = Astro.props;
     display: block;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  :global(.content-wrapper ul) {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
   }
 
   /* Section spacing */

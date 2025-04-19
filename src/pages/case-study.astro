@@ -2,8 +2,7 @@
 import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Introduction from '../content/case-study/introduction.astro';
-import Research from '../content/case-study/research.astro';
-import Design from '../content/case-study/design.astro';
+import Background from '../content/case-study/background.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -12,43 +11,34 @@ const headings = [
     title: "Introduction",
     children: [
       {
-        id: "overview",
-        title: "Overview"
+        id: "what-is-apiary",
+        title: "What is Apiary"
       },
-      {
-        id: "problem-statement",
-        title: "Problem Statement"
-      }
     ]
   },
   {
-    id: "research",
-    title: "Research",
+    id: "background",
+    title: "Background",
     children: [
       {
-        id: "user-research",
-        title: "User Research"
+        id: "foundation-models",
+        title: "Foundation Models and Model-as-a-Service"
       },
       {
-        id: "market-analysis",
-        title: "Market Analysis"
+        id: "challenges",
+        title: "Challenges of Working with LLMs"
+      },
+      {
+        id: "multiple-llms",
+        title: "Why Use Multiple LLMs?"
+      },
+      {
+        id: "abstraction",
+        title: "A New Layer of Abstraction"
       }
     ]
   },
-  {
-    id: "design",
-    title: "Design",
-    children: [
-      {
-        id: "wireframes",
-        title: "Wireframes"
-      },
-      {
-        id: "prototypes",
-        title: "Prototypes"
-      }
-    ]
-  }
+  
 ];
 
 // Helper: Build child image map
@@ -67,8 +57,7 @@ function extractChildImages(children = []) {
       {headings.map(({ id }) => (
         <>
           {id === 'introduction' && <Introduction />}
-          {id === 'research' && <Research />}
-          {id === 'design' && <Design />}
+          {id === 'background' && <Background />}
         </>
       ))}
     </slot>
