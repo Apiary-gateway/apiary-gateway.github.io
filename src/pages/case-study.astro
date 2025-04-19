@@ -1,52 +1,36 @@
 ---
 import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
 const headings = [
   {
     id: "introduction",
     title: "Introduction",
-    img: "/images/intro.png",
-  },
-  {
-    id: "background",
-    title: "Background",
-    img: "/images/background.png",
-    children: [
-      { id: "general-problem-domain", title: "General Problem Domain", img: "/images/general-problem.png" },
-      { id: "caching", title: "Caching" },
-      { id: "change-data-capture", title: "Change Data Capture", img: "/images/cdc.png" },
-    ],
-  },
-  {
-    id: "implementation",
-    title: "Implementation",
-    img: "/images/implementation.png",
-    children: [
-      { id: "debezium", title: "Debezium", img: "/images/debezium.png" },
-      { id: "kafka", title: "Apache Kafka" },
-      { id: "postgresql", title: "PostgreSQL", img: "/images/postgres.png" },
-    ],
-  },
-  {
-    id: "challenges",
-    title: "Challenges",
-    img: "/images/challenges.png",
-    children: [
-      { id: "event-transformation", title: "Event Transformation" },
-      { id: "schema-evolution", title: "Schema Evolution", img: "/images/schema-evolution.png" },
-    ],
-  },
+    img: "/images/intro.png"
+  }
 ];
 
-// Dynamically import all .md components
+// Debug: Log headings
+console.log('Headings:', headings);
+
+// Dynamically import all content from content/case-study directory
 const sectionComponents = Object.fromEntries(
   await Promise.all(
     headings.map(async ({ id }) => {
-      const module = await import(`./case-study-sections/${id}.md`);
-      return [id, module.default];
+      try {
+        const module = await import(`../content/case-study/${id}.mdx`);
+        console.log(`Loaded MDX for ${id}:`, module.default);
+        return [id, module.default];
+      } catch (error) {
+        console.error(`Error loading MDX for ${id}:`, error);
+        return [id, null];
+      }
     })
   )
 );
+
+// Debug: Log section components
+console.log('Section Components:', sectionComponents);
 
 // Helper: Build child image map
 function extractChildImages(children = []) {
@@ -60,10 +44,26 @@ function extractChildImages(children = []) {
 
 <BaseLayout>
   <SidebarScrollLayout headings={headings}>
-    {headings.map(({ id, img, children }) => {
-      const Component = sectionComponents[id];
-      const childImages = extractChildImages(children);
-      return <Component img={img} childImages={childImages} />;
-    })}
+    <slot>
+      {headings.map(({ id, img, children }) => {
+        const Component = sectionComponents[id];
+        const childImages = extractChildImages(children);
+        console.log(`Rendering section ${id}:`, { Component, img, childImages });
+        return Component ? (
+          <div class="section-content" id={id}>
+            <Component img={img} childImages={childImages} />
+          </div>
+        ) : null;
+      })}
+    </slot>
   </SidebarScrollLayout>
 </BaseLayout>
+
+<style>
+  .section-content {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: inherit; /* Add background to make content visible */
+  }
+</style>

@@ -28,3 +28,15 @@ import '../styles/global.css';
     min-height: calc(100vh - 5rem - 10rem); /* Viewport height minus navbar and footer */
   }
 </style>
+
+<script>
+  // Apply theme immediately to prevent flash of wrong theme
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  } else {
+    document.documentElement.setAttribute('data-theme', prefersDark.matches ? 'dark' : 'light');
+  }
+</script>
