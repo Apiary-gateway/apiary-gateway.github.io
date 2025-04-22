@@ -1,4 +1,12 @@
 ---
+import Image from '../../components/Image.astro';
+
+const images = {
+  embeddings: "/images/05-01-embeddings.png",
+  semanticCache: "/images/05-02-semantic-cache.png",
+  guardrails: "/images/05-03-guardrails.png",
+  apiaryArchitecture: "/images/05-04-apiary-architecture.png"
+};
 ---
 
 <section id="building-apiary">
@@ -158,6 +166,8 @@
         <p>In contrast, <strong>semantic caches</strong> are able to recognize the meaning of requests - so that queries like "How do bees make honey?" and "How do bees produce honey?" are identified as semantically equivalent and result in a cache hit.</p>
 
         <p>Semantic caching uses <strong>vector embeddings</strong>, which are arrays of hundreds or thousands of numbers that represent the characteristics of a piece of data, like a sentence or a paragraph. <strong>Embedding models</strong> have been trained to convert inputs like sentences into vector embedding outputs representing the inputs' features. Embeddings can be compared using <strong>cosine similarity</strong>, a calculation that measures how similar two embeddings are to each other. The higher the cosine similarity, the more similar the embeddings. Vector embeddings can be stored in a category of databases called <strong>vector databases</strong>, which are optimized for storing and searching high-dimensional vector embeddings.</p>
+
+        <Image src={images.embeddings} alt="Embeddings" caption="Embeddings"/>
     </div>
 
     <h4>Our Implementation</h4>
@@ -180,6 +190,8 @@
         <li>When the LLM responds, its response will be stored with the embedding for the request in the vector database.</li>
     </ol>
 
+    <Image src={images.semanticCache} alt="Semantic Cache" caption="Semantic Cache"/>
+
     <p>Apiary's semantic caching system uses the Amazon Titan Text Embedding v2 model via AWS Bedrock to generate embeddings. Bedrock is fully managed and easy to integrate with other AWS services, making it a convenient choice for our infrastructure. For storing and searching embeddings, Apiary uses AWS OpenSearch vector search. OpenSearch vector search is a vector database and search tool that is also well-suited for searches that filter on metadata. This allows us to filter semantic cache hits based on userId, provider, and model, just as we do in the simple cache. The semantic cache also implements configurable TTL for cache entries.</p>
 
     <h4>Alternative Approaches and Tradeoffs</h4>
@@ -199,6 +211,8 @@
     <div class="info-box">
         <h4>Technical Overview</h4>
         <p>Guardrails can be implemented at various "intervention levels" in an LLM application, including on the user's query, on any retrieved supplemental information (such as in a RAG), on the LLM's response, and on what is finally returned to the client. At each level, guardrails can determine whether messages should be accepted as is, filtered, modified, or rejected.</p>
+
+        <Image src={images.guardrails} alt="Guardrails" caption="Guardrails"/>
 
         <p>The main techniques for implementing guardrails include:</p>
         <ol>
@@ -300,4 +314,6 @@
     <p>Apiary includes an observability dashboard which allows developers to toggle between viewing short-term and long-term logs. The dashboard fetches logs from DynamoDB (for short-term logs) or Athena query (for long-term logs). The UI is implemented in React and hosted via S3 Static Website Hosting service.</p>
 
     <p>The dashboard also serves as a management hub where users can configure routing logic and guardrails. We considered different options for where to implement this "management hub" - for example by having users pass a configuration object in the SDK, or via CLI commands. Ultimately we felt that the dashboard UI was the most user-friendly option, where we could provide the most intuitive editing interface along with guidance on entering a valid configuration object.</p>
+
+    <Image src={images.apiaryArchitecture} alt="Apiary Architecture" caption="Apiary Architecture"/>
 </section>
