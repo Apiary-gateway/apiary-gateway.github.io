@@ -3,27 +3,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Team from '../components/Team.astro';
 import Footer from '../components/Footer.astro';
+import Image from '../components/Image.astro';
+
 const sections = [
   {
-    title: "Lorem Ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/images/homepage-img1.jpg"
+    title: "Complete Data Control",
+    description: "Unlike managed services like Cloudflare AI Gateway, Apiary runs entirely within your own AWS account, ensuring that sensitive prompt data and responses never leave your control.",
+    image: "/images/04-01-apiary-comparison-chart.png"
   },
   {
-    title: "Lorem Ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/images/homepage-img2.jpg"
+    title: "Built-in Infrastructure",
+    description: "Unlike platforms like LiteLLM that provide only code, Apiary includes pre-configured serverless infrastructure that can be deployed with minimal setup, offering the ease of setup typically found in managed services, without the data sharing concerns.",
+    image: "/images/04-06-manage-config-ui.png"
   },
   {
-    title: "Lorem Ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/images/homepage-img3.jpg",
+    title: "Advanced Features",
+    description: "Apiary includes advanced features that are often available only in premium tiers, or that require third-party integrations and configuration, when using existing offerings: semantic caching, conversation thread management, and content guardrails.",
+    image: "/images/04-09-guardrails-example.png",
     hasButton: true
   }
 ];
 
-const heroText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+const heroText = 'Apiary is an open-source gateway for routing, caching, and observing LLM requests across multiple providers.';
+const heroSubtext = 'A comprehensive, self-managed solution with built-in infrastructure that gives developers complete control over their data and infrastructure.';
 ---
 
 <BaseLayout>
@@ -44,7 +46,7 @@ const heroSubtext = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Se
             )}
           </div>
           <div class="image-content">
-            <img src={section.image} alt={section.title} />
+            <Image src={section.image} alt={section.title} />
           </div>
         </div>
       </section>

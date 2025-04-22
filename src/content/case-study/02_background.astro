@@ -1,5 +1,9 @@
 ---
+import Image from '../../components/Image.astro';
 
+const images = {
+    cloudflareAiGatewayDashboard: "/images/02-01-cloudflare-ai-gateway-dashboard.png",
+};
 ---
 
 <section id="background">
@@ -9,9 +13,7 @@
 
     <h3 id="foundation-models">Foundation Models and Model-as-a-Service</h3>
 
-    <p>A foundation model, such as OpenAI's GPT-4, Anthropic's Claude, and Google's Gemini, is a general purpose AI model trained on large amounts of data and exposed via an API, enabling developers to integrate advanced AI capabilities into their applications.</p>
-
-    <p>Typically, access to these models is provided via API calls to commercial Model-as-a-Service (MaaS) offerings. In some cases, such as when data privacy or intellectual property is a concern, these models are self-hosted.</p>
+    <p>A foundation model, such as OpenAI's GPT-4, Anthropic's Claude, and Google's Gemini, is a general purpose AI model trained on large amounts of data and exposed via an API, enabling developers to integrate advanced AI capabilities into their applications.Typically, access to these models is provided via API calls to commercial Model-as-a-Service (MaaS) offerings.</p>
 
     <p>Foundation models are used for a wide variety of AI features in applications. Some common examples include:</p>
 
@@ -62,7 +64,25 @@
 
     <p>Some organizations, especially in regulated industries, need to handle sensitive data internally. This may mean routing certain queries through self-hosted or internal models before allowing access to external APIs.</p>
 
+    <h3 id="challenges-of-using-multiple-llms">Challenges of Using Multiple LLMs</h3>
+
+    <p>While using multiple models can offer major benefits, it also significantly increases complexity. Developers must contend with:</p>
+
+    <ul>
+        <li><strong>Divergent request/response formats:</strong> Each provider has a unique API structure, which may change frequently. Even structured responses (e.g., JSON) can vary, requiring extra logic to parse and normalize them.</li>
+        <li><strong>Different methods for handling context:</strong> Thread management and chat history differ between providers (e.g., OpenAI uses role-based message arrays, while Anthropic requires a system message per request).</li>
+        <li><strong>Multiple API keys and credential management:</strong> Each model requires its own authentication and security setup.</li>
+        <li><strong>Disparate observability systems:</strong> Without standardization, tracking cost, token usage, and response quality must be implemented separately for each provider.</li>
+        <li><strong>Fallbacks and routing logic:</strong> Implementing conditional logic (e.g., routing based on cost, model failure, or task complexity) is error-prone and often duplicated.</li>
+    </ul>
+
+    <p>Finally, and perhaps most importantly, AI is a rapidly evolving field. Each of the above pain points is amplified by the fact that as API behavior, model availability, and pricing structures change, developers are forced to update the same logic all over the codebase. The sprawl becomes a constant, unmanageable burden.</p>
+
     <h3 id="abstraction">A New Layer of Abstraction</h3>
 
-    <p>These challenges aren't going away. If anything, they're growing as LLMs are integrated into more and more applications. Rather than continuing to patch and duplicate logic across every integration, developers need a centralized layer to manage and abstract LLM interactions. This is where a <strong>model gateway</strong> comes in - a centralized layer that abstracts away the mess of LLM-integrated development. In the next section, we'll look at how existing tools attempt to solve this problem.</p>
+    <p>These challenges aren't going away. If anything, they're growing as LLMs are integrated into more and more applications. Rather than continuing to patch and duplicate logic across every integration, developers need a centralized layer to manage and abstract LLM interactions. This is where a <strong>model gateway</strong> comes in - a centralized layer that abstracts away the mess of LLM-integrated development.</p>
+
+    <p>A model gateway stands between your application and one or more foundation model APIs. It centralizes routing, standardizes requests and response formats, manages credentials, tracks usage and cost, and can apply logic like retries, caching, and guardrails. To give an idea of what the interface for a model gateway can look like, the below image show’s Cloudflare AI Gateway’s dashboard. Each request is routed through the gateway, where it can be tracked and modified according to configured rules.</p>
+
+    <Image src={images.cloudflareAiGatewayDashboard} alt="Cloudflare AI Gateway Dashboard" caption="Cloudflare AI Gateway Dashboard"/>
 </section>

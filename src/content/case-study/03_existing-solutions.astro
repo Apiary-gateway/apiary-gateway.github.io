@@ -1,0 +1,32 @@
+---
+
+---
+
+<section id="existing-solutions">
+  <h2>Existing Solutions</h2>
+  <p>Several tools and platforms have emerged to serve as model gateways. We explored many of these tools in building our product. Each has tradeoffs, which helped us in clarifying what we wanted Apiary to become.</p>
+
+  <h3 id="open-source-tools">Open Source Tools</h3>
+
+  <ul>
+    <li><strong>LiteLLM</strong> and <strong>Portkey (Open Source)</strong> are two open source tools that provide unified APIs for calling multiple LLM providers. Each handles request/response formatting and support basic routing logic. However, they do not offer infrastructure, observability tools, or advanced features like semantic caching or guardrails.</li>
+  </ul>
+
+  <h3 id="managed-services">Managed Services</h3>
+
+  <ul>
+    <li><strong>Cloudflare AI Gateway</strong> is a hosted gateway that provides a universal endpoint for LLM requests, basic caching, tracks token usage, and includes analytics. It runs entirely within Cloudflare’s infrastructure.</li>
+
+    <li><strong>Gloo AI Gateway</strong> offers a managed control panel for LLM requests with support for routing, observability, rate-limiting, and basic content filters. It is built for production-grade deployments and runs on third-party infrastructure.</li>
+  </ul>
+
+  <h3 id="tradeoffs">Tradeoffs</h3>
+
+  <ul>
+    <li>The open source tools are lightweight and easy to integrate, but they lack infrastructure, observability, and have very limited feature sets.</li>
+
+    <li>Both managed services, Cloudflare AI Gateway and Gloo AI Gateway, are fully managed and easier to use, but you have to give up data control and customization.</li>
+  </ul>
+
+  <p>Our ideal model gateway would be free to use, offer complete control over our data, provide configurable routing, request and response standardization, cost monitoring, semantic caching, guardrails, and observability. It also needed to be easy to deploy and fully configurable. With this clarity, we set out to build Apiary.</p>
+</section>

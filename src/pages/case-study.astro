@@ -1,12 +1,12 @@
 ---
+import Introduction from '../content/case-study/01_introduction.astro';
 import SidebarScrollLayout from '../layouts/SidebarScrollLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Introduction from '../content/case-study/introduction.astro';
-import Background from '../content/case-study/background.astro';
-import ExistingSolutions from '../content/case-study/existing-solutions.astro';
-import OurSolution from '../content/case-study/our-solution.astro';
-import BuildingApiary from '../content/case-study/building-apiary.astro';
-import FutureWork from '../content/case-study/future-work.astro';
+import Background from '../content/case-study/02_background.astro';
+import ExistingSolutions from '../content/case-study/03_existing-solutions.astro';
+import OurSolution from '../content/case-study/04_our-solution.astro';
+import BuildingApiary from '../content/case-study/05_building-apiary.astro';
+import FutureWork from '../content/case-study/06_future-work.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -37,6 +37,10 @@ const headings = [
         title: "Why Use Multiple LLMs?"
       },
       {
+        id: "challenges-of-using-multiple-llms",
+        title: "Challenges of Using Multiple LLMs"
+      },
+      {
         id: "abstraction",
         title: "A New Layer of Abstraction"
       }
@@ -47,11 +51,15 @@ const headings = [
     title: "Existing Solutions",
     children: [
       {
-        id: "existing-solutions-overview",
-        title: "Overview"
+        id: "open-source-tools",
+        title: "Open Source Tools"
       },
       {
-        id: "existing-solutions-tradeoffs",
+        id: "managed-services",
+        title: "Managed Services"
+      },
+      {
+        id: "tradeoffs",
         title: "Tradeoffs"
       }
     ]
@@ -71,6 +79,10 @@ const headings = [
       {
         id: "using-apiary",
         title: "Using Apiary"
+      },
+      {
+        id: "a-walkthrough-of-the-apiary-dashboard",
+        title: "A Walkthrough of the Apiary Dashboard"
       }
     ]
   },

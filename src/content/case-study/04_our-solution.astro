@@ -1,0 +1,136 @@
+---
+import Image from '../../components/Image.astro';
+
+const images = {
+  apiaryComparisonChart: "/images/04-01-apiary-comparison-chart.png",
+  shortTermLogs: "/images/04-02-short-term-logs.png",
+  dropdownMenuFocusLongTermLogs: "/images/04-03-dropdown-menu-focus-longterm-logs.png",
+  longTermLogs: "/images/04-04-long-term-logs.png",
+  dropdownMenuFocusGatewayConfig: "/images/04-05-dropdown-menu-focus-gateway-config.png",
+  manageConfigUI: "/images/04-06-manage-config-ui.png",
+  apiaryConditionalGroups: "/images/04-07-apiary-conditional-groups.png",
+  dropdownMenuFocusGuardrailsMenu: "/images/04-08-dropdown-menu-focus-guardrails.png",
+  guardrailsExample: "/images/04-09-guardrails-example.png",
+  logDetailsPart1: "/images/04-10-log-details-part-1.png",
+  logDetailsPart2: "/images/04-11-log-details-part-2.png",
+  routingHistorySimpleCacheHit: "/images/04-12-routing-history-simple-cache-hit.png",
+  routingHistoryGuardrailHit: "/images/04-13-routing-history-guardrail-hit.png",
+  lifeCycleOfARequest: "/images/04-14-life-cycle-of-a-request.png",
+  apiarySDK: "/images/04-15-apiary-sdk.png"
+};
+---
+
+<section id="our-solution">
+  <h2>Our Solution</h2>
+
+  <p>Apiary is a comprehensive, self-managed solution with built-in infrastructure. It's easy to deploy, and gives developers complete control over their data and infrastructure.</p>
+
+  <h3 id="how-apiary-compares-to-alternatives">How Apiary Compares to Alternatives</h3>
+
+  <p>In the table below, we've selected one open-source tool (Portkey) and one hosted solution (Cloudflare AI) to compare alongside Apiary.</p>
+
+  <Image src={images.apiaryComparisonChart} alt="Apiary Comparison Chart" caption="Apiary Comparison Chart"/>
+
+  <p>As the chart illustrates, Apiary combines the strengths of both open-source flexibility and managed service convenience.</p>
+
+  <p>Apiary differentiates itself from existing solutions through a unique combination of features:</p>
+
+  <ul>
+    <li>
+      <strong>Complete Data Control</strong>
+      <p>Unlike managed services like Cloudflare AI Gateway, Apiary runs entirely within your own AWS account, ensuring that sensitive prompt data and responses never leave your control.</p>
+    </li>
+    <li>
+      <strong>Built-in Infrastructure</strong>
+      <p>Unlike platforms like LiteLLM that provide only code, Apiary includes pre-configured serverless infrastructure that can be deployed with minimal setup, offering the ease of setup typically found in managed services, without the data sharing concerns.</p>
+    </li>
+    <li>
+      <strong>Feature Set</strong>
+      <p>Apiary includes advanced features that are often available only in premium tiers, or that require third-party integrations and configuration, when using existing offerings:</p>
+      <ul>
+        <li>Semantic caching, which compares the meaning of new requests to previous ones using vector embeddings</li>
+        <li>Conversation thread management, for maintaining chat history across models</li>
+        <li>Content guardrails, for detecting and managing undesirable responses</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Cost Efficiency</strong>
+      <p>Apiary is free and open-source, requiring only the cost of the AWS infrastructure it runs on and the fees charged by LLM providers.</p>
+    </li>
+  </ul>
+
+  <h3 id="who-apiary-is-for">Who Apiary Is For</h3>
+
+  <p>Apiary is built for small to medium-sized development teams working on AI-integrated applications where reliability, cost-efficiency, configurability, and observability are crucial. It provides a centralized point for managing aspects like API keys and guardrails, minimizing the coordination needed between different systems and team members. Built-in observability allows developers to track the life cycle of a request through the system, and monitor where errors may be occurring. Features like conditional routing, fallbacks, and caching help to optimize application performance and costs. Each of these features is configurable, allowing developers to optimize Apiary for their specific applications' needs.</p>
+
+  <h3 id="a-walkthrough-of-the-apiary-dashboard">A Walkthrough of the Apiary Dashboard</h3>
+
+  <p>Once deployed, Apiary provides users with two primary endpoints:</p>
+
+  <ul>
+    <li>A request endpoint where client applications can send prompts and receive responses from configured LLMs</li>
+    <li>An observability and management dashboard where users can view their request logs and configure routing, caching, fallback, and guardrail settings through a user interface</li>
+  </ul>
+
+  <p>The Apiary user interface is designed to give developers full visibility of their LLM requests, as well as control over how the requests are routed. Here's a walkthrough of the key areas:</p>
+
+  <h4>Logs Overview</h4>
+
+  <p>The first page you'll see in the dashboard is the short-term logs view, which displays all of the requests and responses routed through Apiary in the past 5 days.</p>
+
+  <Image src={images.shortTermLogs} alt="Short Term Logs View" caption="Short Term Logs Dashboard"/>
+
+  <p>You can then click on the hamburger icon in the upper-right and select "Show Long Term Logs" to retrieve the full historical logs for your application.</p>
+
+  <Image src={images.dropdownMenuFocusLongTermLogs} alt="Show Long Term Logs Menu Option" caption="Show Long Term Logs Menu Option"/>
+  <Image src={images.longTermLogs} alt="Long Term Logs View" caption="Long Term Logs Dashboard"/>
+
+  <h4>Configuring Request Handling and Routing</h4>
+
+  <p>Apiary's routing behavior is controlled via a configuration object, which can be edited directly through the dashboard.</p>
+
+  <Image src={images.dropdownMenuFocusGatewayConfig} alt="Manage Config Object Menu" caption="Manage Config Object Menu"/>
+
+  <p>The default configuration object is shown below, along with some notes on the configuration options:</p>
+
+  <Image src={images.manageConfigUI} alt="Manage Config UI" caption="Manage Config UI"/>
+
+  <p>Conditional routing based on custom, user-defined fields can be configured through the configuration object in the <code>availableMetadata</code> and <code>conditions</code> arrays:</p>
+
+  <Image src={images.apiaryConditionalGroups} alt="Apiary Conditional Groups" caption="Apiary Conditional Groups"/>
+
+  <p>In the above configuration, Apiary will look for a request header of "x-user-type," and if the value in that header is "pro," it will be routed to OpenAI's GPT-4 model 60% of the time, and Gemini's 1.5 Pro model 40% of the time.</p>
+
+  <p>The dashboard provides syntax validation and helpful error messages to guide users through customizing the configuration object.</p>
+
+  <h4>Setting Guardrails</h4>
+
+  <p>The default Apiary configuration includes some basic guardrails, which can be expanded upon or edited through the user interface:</p>
+
+  <Image src={images.dropdownMenuFocusGuardrailsMenu} alt="Manage Guardrails Menu" caption="Manage Guardrails Menu"/>
+  <Image src={images.guardrailsExample} alt="Guardrails Example" caption="Guardrails Example"/>
+
+  <p>Apiary will check LLM responses, plus the context of the prompt, for semantic similarity to the configured guardrails. Any responses that fall above the configured threshold will be blocked. We provide a detailed discussion on guardrails and semantic similarity in the Building Apiary section of our case study.</p>
+
+  <h4>Log Details</h4>
+
+  <p>To see the exact settings for a given request, you can click on that request in the logs table and a details modal will open.</p>
+
+  <Image src={images.logDetailsPart1} alt="Log Details Part 1" caption="Log Details Part 1"/>
+  <Image src={images.logDetailsPart2} alt="Log Details Part 2" caption="Log Details Part 2"/>
+
+  <p>The routing history shows the exact route that a request took:</p>
+
+  <Image src={images.routingHistorySimpleCacheHit} alt="Model routing history displaying a condition match and a simple cache hit." caption="Model routing history displaying a simple cache hit."/>
+
+  <Image src={images.routingHistoryGuardrailHit} alt="Model routing history displaying a guardrail hit." caption="Model routing history displaying a guardrail hit."/>
+
+  <h3>Getting Started with Apiary</h3>
+
+  <p>Users can get started with our Command Line Interface (CLI) tool. The CLI tool provides commands to automatically deploy (and destroy) Apiary infrastructure using AWS Cloud Development Kit (CDK). Once the user's infrastructure is deployed, they can navigate to the observability and management dashboard to configure their desired settings.</p>
+
+  <p>Once configured, the Apiary Software Development Kit (SDK) can be used to send client requests to the system.</p>
+
+  <Image src={images.apiarySDK} alt="Apiary SDK" caption="Apiary SDK"/>
+
+</section> 
