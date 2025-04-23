@@ -5,7 +5,7 @@ const { heroSubtext } = Astro.props
 <section class="hero">
   <div class="hero-content">
     <div class="logo-container">
-      <img src="/images/APIARYLogonb.png" alt="Apiary Logo" class="apiary-logo" />
+      <img src="/images/APIARYLogoBetter.png" alt="Apiary Logo" class="apiary-logo" />
     </div>
     <p>{heroSubtext}</p>
     <a href="/case-study" class="hero-button">Read Case Study</a>
@@ -79,19 +79,19 @@ const { heroSubtext } = Astro.props
 
   @keyframes borderGlow {
     0% {
-      box-shadow: 0 0 5px #cd9e05,
-                  0 0 10px #cd9e05,
-                  0 0 15px #cd9e05;
+      box-shadow: 0 0 5px var(--primary-color),
+                  0 0 10px var(--primary-color),
+                  0 0 15px var(--primary-color);
     }
     50% {
-      box-shadow: 0 0 10px #cd9e05,
-                  0 0 20px #cd9e05,
-                  0 0 30px #cd9e05;
+      box-shadow: 0 0 10px var(--primary-color),
+                  0 0 20px var(--primary-color),
+                  0 0 30px var(--primary-color);
     }
     100% {
-      box-shadow: 0 0 5px #cd9e05,
-                  0 0 10px #cd9e05,
-                  0 0 15px #cd9e05;
+      box-shadow: 0 0 5px var(--primary-color),
+                  0 0 10px var(--primary-color),
+                  0 0 15px var(--primary-color);
     }
   }
 
@@ -168,12 +168,12 @@ const { heroSubtext } = Astro.props
     const root = document.documentElement;
     if (theme === 'dark') {
       root.style.setProperty('--hero-gradient', 'linear-gradient(135deg, #1a1a1a, #2d2d2d, #404040)');
-      root.style.setProperty('--primary-color', '#cd9e05');
-      root.style.setProperty('--primary-color-hover', '#977503');
+      root.style.setProperty('--primary-color', '#e0b10e');
+      root.style.setProperty('--primary-color-hover', '#cd9e05');
     } else {
       root.style.setProperty('--hero-gradient', 'linear-gradient(135deg, #f0f2f5, #e2e5e9, #d4d8dd)');
-      root.style.setProperty('--primary-color', '#cd9e05');
-      root.style.setProperty('--primary-color-hover', '#977503');
+      root.style.setProperty('--primary-color', '#a17f04');
+      root.style.setProperty('--primary-color-hover', '#8a6d03');
     }
   };
 
