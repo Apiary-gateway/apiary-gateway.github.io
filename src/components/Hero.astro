@@ -1,10 +1,12 @@
 ---
-const { heroText, heroSubtext } = Astro.props
+const { heroSubtext } = Astro.props
 ---
 
 <section class="hero">
   <div class="hero-content">
-    <h1>{heroText}</h1>
+    <div class="logo-container">
+      <img src="/images/APIARYLogonb.png" alt="Apiary Logo" class="apiary-logo" />
+    </div>
     <p>{heroSubtext}</p>
     <a href="/case-study" class="hero-button">Read Case Study</a>
   </div>
@@ -12,31 +14,30 @@ const { heroText, heroSubtext } = Astro.props
 
 <style>
   :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #45A049;
+    --primary-color: #cd9e05;
+    --secondary-color: #977503;
     --text-color: #ffffff;
     --overlay-color: rgba(0, 0, 0, 0.4);
   }
 
-.hero {
-  position: relative;
-  height: 100vh;
-  width: 100%;
-  background: var(--hero-gradient);
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-primary);
-  text-align: center;
-  padding: 0 1rem;
-  overflow: hidden;
-  margin-top: -50px;
-  transition: background 0.3s ease;
-}
-
+  .hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background: var(--hero-gradient);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    text-align: center;
+    padding: 0 1rem;
+    overflow: hidden;
+    margin-top: -50px;
+    transition: background 0.3s ease;
+  }
 
   .hero-content {
     position: relative;
@@ -47,13 +48,61 @@ const { heroText, heroSubtext } = Astro.props
     padding-top: 80px;
   }
 
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .apiary-logo {
+    width: 400px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    background: transparent;
+    mix-blend-mode: multiply;
+    position: relative;
+    padding: 4px;
+    animation: scaleUp 1s ease-out, borderGlow 2s linear infinite;
+  }
+
+  @keyframes scaleUp {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes borderGlow {
+    0% {
+      box-shadow: 0 0 5px #cd9e05,
+                  0 0 10px #cd9e05,
+                  0 0 15px #cd9e05;
+    }
+    50% {
+      box-shadow: 0 0 10px #cd9e05,
+                  0 0 20px #cd9e05,
+                  0 0 30px #cd9e05;
+    }
+    100% {
+      box-shadow: 0 0 5px #cd9e05,
+                  0 0 10px #cd9e05,
+                  0 0 15px #cd9e05;
+    }
+  }
+
   .hero h1 {
     font-size: clamp(2.5rem, 5vw, 4rem);
-    margin-bottom: 2.5rem;
+    margin: 0;
     font-weight: 800;
     line-height: 1.2;
     color: var(--text-primary);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.1em;
   }
 
   .hero p {
@@ -105,20 +154,26 @@ const { heroText, heroSubtext } = Astro.props
     .hero-content {
       padding: 0 1.5rem;
     }
+
+    .apiary-logo {
+      width: 300px;
+      background: transparent;
+      mix-blend-mode: multiply;
+    }
   }
 </style>
 
 <script>
-  const updateHeroTheme = (theme) => {
+  const updateHeroTheme = (theme: string) => {
     const root = document.documentElement;
     if (theme === 'dark') {
       root.style.setProperty('--hero-gradient', 'linear-gradient(135deg, #1a1a1a, #2d2d2d, #404040)');
-      root.style.setProperty('--primary-color', '#4CAF50');
-      root.style.setProperty('--primary-color-hover', '#45A049');
+      root.style.setProperty('--primary-color', '#cd9e05');
+      root.style.setProperty('--primary-color-hover', '#977503');
     } else {
       root.style.setProperty('--hero-gradient', 'linear-gradient(135deg, #f0f2f5, #e2e5e9, #d4d8dd)');
-      root.style.setProperty('--primary-color', '#45A049');
-      root.style.setProperty('--primary-color-hover', '#3d8b40');
+      root.style.setProperty('--primary-color', '#cd9e05');
+      root.style.setProperty('--primary-color-hover', '#977503');
     }
   };
 
