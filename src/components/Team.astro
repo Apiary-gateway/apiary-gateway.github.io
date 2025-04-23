@@ -55,7 +55,7 @@ const teamMembers = [
         <div class="social-links">
           <a href={member.social.linkedin} aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
           <a href={member.social.github} aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href={member.social.email} aria-label="Email"><i class="fas fa-envelope"></i></a>
+          <a href={`mailto:${member.social.email}`} aria-label="Email"><i class="fas fa-envelope"></i></a>
         </div>
       </div>
     ))}
