@@ -1,5 +1,6 @@
 ---
 import Image from '../../components/Image.astro';
+import Carousel from '../../components/Carousel.astro';
 
 const images = {
   apiaryComparisonChart: "/images/04-01-apiary-comparison-chart.png",
@@ -18,6 +19,13 @@ const images = {
   lifeCycleOfARequest: "/images/04-14-life-cycle-of-a-request.png",
   apiarySDK: "/images/04-15-apiary-sdk.png"
 };
+
+const logDetailsCarouselItems = [
+  { image: images.logDetailsPart1, caption: "Log Details Part 1" },
+  { image: images.logDetailsPart2, caption: "Log Details Part 2" },
+  { image: images.routingHistorySimpleCacheHit, caption: "Model routing history displaying a simple cache hit." },
+  { image: images.routingHistoryGuardrailHit, caption: "Model routing history displaying a guardrail hit." }
+];
 ---
 
 <section id="our-solution">
@@ -116,14 +124,7 @@ const images = {
 
   <p>To see the exact settings for a given request, you can click on that request in the logs table and a details modal will open.</p>
 
-  <Image src={images.logDetailsPart1} alt="Log Details Part 1" caption="Log Details Part 1"/>
-  <Image src={images.logDetailsPart2} alt="Log Details Part 2" caption="Log Details Part 2"/>
-
-  <p>The routing history shows the exact route that a request took:</p>
-
-  <Image src={images.routingHistorySimpleCacheHit} alt="Model routing history displaying a condition match and a simple cache hit." caption="Model routing history displaying a simple cache hit."/>
-
-  <Image src={images.routingHistoryGuardrailHit} alt="Model routing history displaying a guardrail hit." caption="Model routing history displaying a guardrail hit."/>
+  <Carousel items={logDetailsCarouselItems} autoPlay={true} interval={5000} />
 
   <h3>Getting Started with Apiary</h3>
 
