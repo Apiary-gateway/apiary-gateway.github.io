@@ -37,17 +37,22 @@ const { src, alt, height = 'auto', width = '100%', caption } = Astro.props;
 <style>
   .image-container {
     margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .image {
     height: v-bind(height);
     width: v-bind(width);
+    max-width: 100%;
     transition: transform 0.2s ease;
     border-radius: 4px;
     cursor: pointer;
     margin: 0;
     padding: 0;
     display: block;
+    object-fit: contain;
   }
 
   .image:hover {

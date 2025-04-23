@@ -162,7 +162,7 @@ const { children, headings } = Astro.props;
     font-size: 1.5rem;
     font-weight: 500;
     line-height: 1.4;
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 8rem;
   }
 
   :global(.content-wrapper h4) {
@@ -403,7 +403,7 @@ const { children, headings } = Astro.props;
       const targetId = this.getAttribute('href');
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
-        const headerOffset = 100; // Increased offset for better spacing
+        const headerOffset = 125; // Reduced offset for better spacing
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -426,7 +426,7 @@ const { children, headings } = Astro.props;
       setTimeout(() => {
         const targetElement = document.querySelector(hash);
         if (targetElement) {
-          const headerOffset = 100; // Same offset as above
+          const headerOffset = 125; // Same offset as above
           const elementPosition = targetElement.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
