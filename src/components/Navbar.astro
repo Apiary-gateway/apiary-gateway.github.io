@@ -1,5 +1,4 @@
 ---
-const title = "Apiary";
 const organizationURL = 'https://github.com/Sporkway';
 const currentPath = Astro.url.pathname;
 ---
@@ -15,7 +14,6 @@ const currentPath = Astro.url.pathname;
       <a href="/" class="logo">
         <img src="/apiary-logo.png" alt="Apiary Logo" />
       </a>
-      <span class="brand-name"><a href="/" class={currentPath === '/' ? 'active' : ''}>{title}</a></span>
     </div>
     <div class="nav-links">
       <a href="/case-study" class={currentPath.startsWith('/case-study') ? 'active' : ''}>Case Study</a>
@@ -67,7 +65,7 @@ const currentPath = Astro.url.pathname;
 <style>
   .navbar {
     background-color: var(--navbar-bg);
-    padding: 1rem 0;
+    padding: 1.25rem 0 0.5rem 0;
     border-bottom: 1px solid var(--navbar-border);
     width: 100%;
     position: fixed;
@@ -83,6 +81,7 @@ const currentPath = Astro.url.pathname;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 72px;
   }
 
   .logo-container {
@@ -92,7 +91,7 @@ const currentPath = Astro.url.pathname;
   }
 
   .logo img {
-    height: 48px;
+    height: 72px;
     width: auto;
   }
 
@@ -101,6 +100,7 @@ const currentPath = Astro.url.pathname;
     font-weight: 700;
     font-size: 1.5rem;
     text-decoration: none;
+    font-family: 'Gotham Bold', sans-serif;
   }
 
   [data-theme='dark'] .brand-name a {
@@ -122,6 +122,8 @@ const currentPath = Astro.url.pathname;
     gap: 0.25rem;
     transition: color 0.3s ease;
     position: relative;
+    line-height: 1;
+    padding: 0.5rem 0;
   }
 
   .nav-links a:hover {
@@ -310,7 +312,7 @@ const currentPath = Astro.url.pathname;
       root.style.setProperty('--navbar-bg', '#1a1a1a');
       root.style.setProperty('--navbar-border', '#2d2d2d');
       root.style.setProperty('--text-primary', '#ffffff');
-      root.style.setProperty('--primary-color', '#4CAF50');
+      root.style.setProperty('--primary-color', '#cd9e05');
       root.style.setProperty('--color-background', '#1a1a1a');
       root.style.setProperty('--color-background-alt', '#242424');
       root.style.setProperty('--color-text', '#ffffff');
@@ -319,7 +321,7 @@ const currentPath = Astro.url.pathname;
       root.style.setProperty('--navbar-bg', '#ffffff');
       root.style.setProperty('--navbar-border', '#e0e0e0');
       root.style.setProperty('--text-primary', '#333333');
-      root.style.setProperty('--primary-color', '#45A049');
+      root.style.setProperty('--primary-color', '#cd9e05');
       root.style.setProperty('--color-background', '#ffffff');
       root.style.setProperty('--color-background-alt', '#f1f5f9');
       root.style.setProperty('--color-text', '#333333');
