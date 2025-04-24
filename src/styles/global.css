@@ -330,6 +330,10 @@ footer {
   .project-grid {
     grid-template-columns: 1fr;
   }
+
+  .hero-content {
+    padding-top: 56px;
+  }
 }
 
 /* Code element styling */
