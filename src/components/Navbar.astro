@@ -93,6 +93,7 @@ const currentPath = Astro.url.pathname;
   .logo img {
     height: 72px;
     width: auto;
+    transition: height 0.3s ease;
   }
 
   .brand-name a {
@@ -243,13 +244,22 @@ const currentPath = Astro.url.pathname;
   }
 
   @media (max-width: 768px) {
+    .navbar {
+      padding: 0.75rem 0 0.25rem 0;
+    }
+
     .navbar-container {
-      padding: 0 1rem;
+      padding: 0 0.75rem;
+      min-height: 56px;
     }
 
     .logo-container {
       flex: 1;
       justify-content: flex-start;
+    }
+
+    .logo img {
+      height: 48px;
     }
 
     .hamburger {
@@ -264,6 +274,16 @@ const currentPath = Astro.url.pathname;
 
     .nav-links {
       display: none;
+    }
+
+    .mobile-menu {
+      width: 100%;
+      max-width: none;
+      padding: 1rem;
+    }
+
+    .mobile-menu-content {
+      margin-top: 2rem;
     }
   }
 </style>
