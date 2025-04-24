@@ -1,0 +1,13 @@
+---
+interface Props {
+  id: string;
+  text: string;
+  url: string;
+}
+
+const { id, text, url } = Astro.props;
+---
+
+<li id={`footnote-${id}`}>
+  <a href={url} target="_blank" rel="noopener noreferrer">{text}</a>
+</li> 

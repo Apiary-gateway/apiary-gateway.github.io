@@ -1,0 +1,32 @@
+---
+const { footnotes } = Astro.props;
+---
+
+<ol class="footnotes">
+  {footnotes.map((item) => (
+    <li id={`footnote-${item.id}`}>
+      <a href={item.url} target="_blank" rel="noopener noreferrer">{item.text}</a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .footnotes {
+    list-style-type: decimal;
+    padding-left: 2rem;
+    margin-top: 1rem;
+  }
+  
+  .footnotes li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footnotes a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  
+  .footnotes a:hover {
+    text-decoration: underline;
+  }
+</style> 

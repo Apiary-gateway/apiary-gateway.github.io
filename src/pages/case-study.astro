@@ -7,6 +7,7 @@ import ExistingSolutions from '../content/case-study/03_existing-solutions.astro
 import OurSolution from '../content/case-study/04_our-solution.astro';
 import BuildingApiary from '../content/case-study/05_building-apiary.astro';
 import FutureWork from '../content/case-study/06_future-work.astro';
+import References from '../content/case-study/08_references.astro';
 
 // Define the structure of your case study content
 const headings = [
@@ -153,6 +154,11 @@ const headings = [
         title: "Additional Guardrail Features"
       }
     ]
+  },
+  {
+    id: "references",
+    title: "References",
+    children: []
   }
 ];
 ---
@@ -168,6 +174,7 @@ const headings = [
           {id === 'our-solution' && <OurSolution />}
           {id === 'building-apiary' && <BuildingApiary />}
           {id === 'future-work' && <FutureWork />}
+          {id === 'references' && <References />}
         </>
       ))}
     </slot>

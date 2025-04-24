@@ -52,13 +52,13 @@ const images = {
 
     <h4>Reliability and Fallbacks</h4>
 
-    <p>LLMs often fall short of enterprise reliability standards (e.g., "five nines" or 99.999% uptime). GPT-4 and Claude models, for example, typically offer only 99.2–99.7% availability (<a href="https://status.openai.com/">source</a>, <a href="https://status.anthropic.com/">source</a>). In high-availability applications, developers must implement fallback strategies using alternative models to ensure uninterrupted service.</p>
+    <p>LLMs often fall short of enterprise reliability standards (e.g., "five nines" or 99.999% uptime). GPT-4 and Claude models, for example, typically offer only 99.2–99.7% availability <sup><a href="#footnote-1">1</a>, <a href="#footnote-2">2</a></sup>. In high-availability applications, developers must implement fallback strategies using alternative models to ensure uninterrupted service.</p>
 
     <h4>Performance Evaluation and Testing</h4>
 
     <p>During development or experimentation, teams often compare responses from different models to determine which performs best. In production, multiple models may be used simultaneously in A/B tests or canary deployments to evaluate response quality, bias, or relevance.</p>
 
-    <p>"LLM as a judge", where a separate model evaluates the performance of a primary model, has also emerged as a highly popular way to evaluate LLM responses (<a href="https://blog.langchain.dev/langchain-state-of-ai-2023/">source</a>).</p>
+    <p>"LLM as a judge", where a separate model evaluates the performance of a primary model, has also emerged as a highly popular way to evaluate LLM responses <sup><a href="#footnote-3">3</a></sup>.</p>
 
     <h4>Data Sensitivity and Internal Processing</h4>
 
@@ -82,7 +82,7 @@ const images = {
 
     <p>These challenges aren't going away. If anything, they're growing as LLMs are integrated into more and more applications. Rather than continuing to patch and duplicate logic across every integration, developers need a centralized layer to manage and abstract LLM interactions. This is where a <strong>model gateway</strong> comes in - a centralized layer that abstracts away the mess of LLM-integrated development.</p>
 
-    <p>A model gateway stands between your application and one or more foundation model APIs. It centralizes routing, standardizes requests and response formats, manages credentials, tracks usage and cost, and can apply logic like retries, caching, and guardrails. To give an idea of what the interface for a model gateway can look like, the below image show’s Cloudflare AI Gateway’s dashboard. Each request is routed through the gateway, where it can be tracked and modified according to configured rules.</p>
+    <p>A model gateway stands between your application and one or more foundation model APIs. It centralizes routing, standardizes requests and response formats, manages credentials, tracks usage and cost, and can apply logic like retries, caching, and guardrails. To give an idea of what the interface for a model gateway can look like, the below image show's Cloudflare AI Gateway's dashboard. Each request is routed through the gateway, where it can be tracked and modified according to configured rules.</p>
 
     <Image src={images.cloudflareAiGatewayDashboard} alt="Cloudflare AI Gateway Dashboard" caption="Cloudflare AI Gateway Dashboard"/>
 </section>
