@@ -17,7 +17,7 @@ const images = {
   routingHistorySimpleCacheHit: "/images/04-12-routing-history-simple-cache-hit.png",
   routingHistoryGuardrailHit: "/images/04-13-routing-history-guardrail-hit.png",
   lifeCycleOfARequest: "/images/04-14-life-cycle-of-a-request.png",
-  apiarySDK: "/images/04-15-apiary-sdk.png"
+  apiarySDK: "/images/sdk-screenshot-1.png"
 };
 
 const logDetailsCarouselItems = [
@@ -126,12 +126,12 @@ const logDetailsCarouselItems = [
 
   <Carousel items={logDetailsCarouselItems} autoPlay={true} interval={5000} />
 
-  <h3>Getting Started with Apiary</h3>
+  <h3 id="getting-started-with-apiary">Getting Started with Apiary</h3>
 
   <p>Users can get started with our Command Line Interface (CLI) tool. The CLI tool provides commands to automatically deploy (and destroy) Apiary infrastructure using AWS Cloud Development Kit (CDK). Once the user's infrastructure is deployed, they can navigate to the observability and management dashboard to configure their desired settings.</p>
 
   <p>Once configured, the Apiary Software Development Kit (SDK) can be used to send client requests to the system.</p>
 
-  <Image src={images.apiarySDK} alt="Apiary SDK" caption="Apiary SDK"/>
+  <Image src={images.apiarySDK} alt="Apiary SDK" caption="Example usage of the Apiary TypeScript SDK"/>
 
 </section> 
