@@ -28,6 +28,13 @@ import '../styles/global.css';
     padding-top: 6rem; /* Account for fixed navbar height */
     min-height: calc(100vh - 6rem); /* Viewport height minus navbar only */
   }
+
+  @media (max-width: 768px) {
+    .main-content {
+      padding-top: 4.5rem; /* Reduced padding for mobile */
+      min-height: calc(100vh - 4.5rem);
+    }
+  }
 </style>
 
 <script>
