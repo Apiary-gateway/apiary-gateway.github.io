@@ -112,6 +112,7 @@ main {
   max-width: 100%;
   margin: 0;
   padding: 0;
+  padding-top: 72px;
 }
 
 section {
@@ -319,6 +320,9 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  main {
+    padding-top: 56px;
+  }
   section {
     padding: var(--spacing-lg) 0;
   }
