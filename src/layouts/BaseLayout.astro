@@ -33,11 +33,10 @@ import '../styles/global.css';
 <script>
   // Apply theme immediately to prevent flash of wrong theme
   const savedTheme = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
   
   if (savedTheme) {
     document.documentElement.setAttribute('data-theme', savedTheme);
   } else {
-    document.documentElement.setAttribute('data-theme', prefersDark.matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', 'dark');
   }
 </script>

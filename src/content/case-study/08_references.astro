@@ -1,5 +1,4 @@
 ---
-import Footnote from '../../components/Footnote.astro';
 import Footnotes from '../../components/Footnotes.astro';
 
 const footnotes = [
@@ -40,4 +39,25 @@ const footnotes = [
     <h2>References</h2>
     <p>This section contains all references cited throughout the case study.</p>
     <Footnotes footnotes={footnotes} />
-</section> 
+</section>
+
+<style>
+  .footnotes {
+    list-style-type: decimal;
+    padding-left: 2rem;
+    margin-top: 1rem;
+  }
+  
+  .footnotes li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footnotes a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  
+  .footnotes a:hover {
+    text-decoration: underline;
+  }
+</style> 
