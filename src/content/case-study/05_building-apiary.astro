@@ -90,16 +90,10 @@ const images = {
     <p>Managing threads effectively requires persistent storage, standardization across providers, and strategies for handling long-running conversations.</p>
 
     <h4>Our Implementation Choices</h4>
-    <p>We implemented a thread management system with the following components:</p>
-    <ul>
-        <li>Each query and response is stored in a DynamoDB table</li>
-        <li>Conversations are identified by a thread ID, which can be provided by the client in the request or auto-generated based on timestamp</li>
-        <li>Standardization via our wrapped library simplified handling different provider formats and roles</li>
-        <li>Upon receiving a query with a thread ID, the table is checked for message history</li>
-        <li>Historical messages are retrieved and passed to the chat completions call for context</li>
-        <li>This approach works across providers despite their different underlying APIs</li>
-    </ul>
+    <p>When a user sends a prompt to Apiary, they have the option to include a <code>threadID</code> or let the system generate one automatically based on the current timestamp. This <code>threadID</code> acts as a key for the conversation, allowing us to link each message in a thread together.</p>
 
+    <p>Every query and its corresponding response is stored in a DynamoDB table. Standardization via our wrapped library ensures the conversation has been normalized prior to being saved. When a new message arrives with a <code>threadID</code>, Apiary retrieves the full message history associated with that thread. This history is then passed along with the new prompt to the LLM, giving it the full conversational context.</p>
+        
     <p>This implementation provides thread management without requiring clients to manage conversation history themselves. The conversation context is automatically maintained and provided to each new request in the thread.</p>
 
     <h4>Alternative Approaches and Tradeoffs</h4>
@@ -153,7 +147,7 @@ const images = {
     <h3 id="caching">Caching</h3>
 
     <h4>The Challenge</h4>
-    <p>As discussed, common developer concerns when working with LLMs include cost and high latency, especially compared to traditional API calls. Response times can vary significantly depending on the model, the length of the input prompt and generated output (measured in tokens), and the current load on the provider's infrastructure <sup><a href="#footnote-5">5</a></sup>. Tracking tools monitoring API response times regularly record latencies exceeding five seconds, even for relatively fast models like OpenAI's GPT-3.5-turbo generating outputs of up to 512 tokens <sup><a href="#footnote-4">4</a></sup>. Tracked response times increase when using more powerful models, and may increase even further when requesting longer outputs.</p>
+    <p>As discussed, common developer concerns when working with LLMs include cost and high latency, especially compared to traditional API calls. Response times can vary significantly depending on the model, the length of the input prompt and generated output (measured in tokens), and the current load on the provider's infrastructure <sup><a href="#footnote-5">5</a></sup>. Tracked response times increase when using more powerful models, and may increase even further when requesting longer outputs.</p>
 
     <p>LLM pricing also varies based on the provider and model, but is generally charged based on tokens used. As of this writing, OpenAI's GPT-4.1 model - which it touts as a "model for everyday tasks" - costs $2.00 per million input tokens and $8.00 per million output tokens. o1-pro, one of OpenAI's most advanced models, costs $150.00 per million input tokens and $600.00 per million output tokens. Costs can add up even when using a cheaper model, especially for high traffic applications.</p>
 
