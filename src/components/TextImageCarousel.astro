@@ -24,7 +24,16 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
           <div class="text-image-carousel-item" data-index={index}>
             <div class="text-content" set:html={item.text} />
             <div class="image-content">
-              <img src={item.image} alt={item.caption || `Slide ${index + 1}`} />
+              <div class="image-wrapper">
+                <img src={item.image} alt={item.caption || `Slide ${index + 1}`} data-caption={item.caption} />
+                <button class="zoom-button" aria-label="View image in full size">
+                  <div class="magnifying-glass">
+                    <div class="handle"></div>
+                    <div class="plus-horizontal"></div>
+                    <div class="plus-vertical"></div>
+                  </div>
+                </button>
+              </div>
               {item.caption && <div class="caption">{item.caption}</div>}
             </div>
           </div>
@@ -41,6 +50,12 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
       ))}
     </div>
   </div>
+</div>
+
+<div id="image-modal" class="modal">
+  <span class="close-modal">&times;</span>
+  <img class="modal-content" id="modal-image">
+  <div id="modal-caption"></div>
 </div>
 
 <style>
@@ -184,6 +199,126 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
     opacity: 0.8;
   }
 
+  .image-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .zoom-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(2px);
+    padding: 0;
+  }
+
+  .magnifying-glass {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-radius: 50%;
+  }
+
+  .handle {
+    position: absolute;
+    width: 8px;
+    height: 2px;
+    background: white;
+    bottom: -4px;
+    right: -4px;
+    transform: rotate(45deg);
+  }
+
+  .plus-horizontal {
+    position: absolute;
+    width: 8px;
+    height: 2px;
+    background: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .plus-vertical {
+    position: absolute;
+    width: 2px;
+    height: 8px;
+    background: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .zoom-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+  }
+
+  .zoom-button:hover .magnifying-glass {
+    transform: scale(1.1);
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow: auto;
+  }
+
+  .modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  #modal-caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: white;
+    padding: 10px 0;
+    height: 150px;
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .close-modal:hover,
+  .close-modal:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
   @media (max-width: 768px) {
     .walkthrough-wrapper {
       padding: 1.5rem;
@@ -229,6 +364,18 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
       width: 2.5rem;
       font-size: 1.2rem;
     }
+
+    .zoom-button {
+      width: 32px;
+      height: 32px;
+      top: 8px;
+      right: 8px;
+    }
+
+    .magnifying-glass {
+      width: 18px;
+      height: 18px;
+    }
   }
 </style>
 
@@ -241,6 +388,8 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
   
   let currentIndex = 0;
   let autoPlayInterval: number | null = null;
+  const autoPlayEnabled = document.querySelector('.text-image-carousel-container')?.getAttribute('data-autoplay') === 'true';
+  const playInterval = Number(document.querySelector('.text-image-carousel-container')?.getAttribute('data-interval') || 5000);
   
   const updateCarousel = () => {
     if (carousel) {
@@ -263,7 +412,7 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
   
   const startAutoPlay = () => {
     if (autoPlayInterval) return;
-    autoPlayInterval = setInterval(nextSlide, interval);
+    autoPlayInterval = setInterval(nextSlide, playInterval);
   };
   
   const stopAutoPlay = () => {
@@ -327,7 +476,7 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
   };
   
   // Initialize
-  if (autoPlay) {
+  if (autoPlayEnabled) {
     startAutoPlay();
   }
   
@@ -335,8 +484,56 @@ const { items, autoPlay = false, interval = 5000, title = "Interactive Walkthrou
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       stopAutoPlay();
-    } else if (autoPlay) {
+    } else if (autoPlayEnabled) {
       startAutoPlay();
+    }
+  });
+
+  // Modal functionality
+  const modal = document.getElementById('image-modal') as HTMLElement | null;
+  const modalImg = document.getElementById('modal-image') as HTMLImageElement | null;
+  const modalCaption = document.getElementById('modal-caption') as HTMLElement | null;
+  const closeModal = document.querySelector('.close-modal') as HTMLElement | null;
+  const zoomButtons = document.querySelectorAll('.zoom-button');
+
+  function showModal(imgSrc: string, caption: string) {
+    if (!modal || !modalImg || !modalCaption) return;
+    
+    modal.style.display = 'block';
+    modalImg.src = imgSrc;
+    modalCaption.textContent = caption;
+  }
+
+  function hideModal() {
+    if (!modal) return;
+    modal.style.display = 'none';
+  }
+
+  zoomButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const img = button.previousElementSibling as HTMLImageElement;
+      if (img) {
+        const caption = img.getAttribute('data-caption') || '';
+        showModal(img.src, caption);
+      }
+    });
+  });
+
+  if (closeModal) {
+    closeModal.addEventListener('click', hideModal);
+  }
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        hideModal();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.style.display === 'block') {
+      hideModal();
     }
   });
 </script> 
