@@ -14,6 +14,27 @@ import '../styles/global.css';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gotham:wght@700&display=swap" rel="stylesheet">
+    <script>
+      // Set theme before any content renders
+      (function() {
+        const savedTheme = localStorage.getItem('theme');
+        const theme = savedTheme || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (!savedTheme) {
+          localStorage.setItem('theme', 'dark');
+        }
+      })();
+    </script>
+    <style>
+      /* Prevent flash of wrong theme */
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        background-color: var(--color-background);
+        color: var(--color-text);
+      }
+    </style>
   </head>
   <body>
     <Navbar />
@@ -36,14 +57,3 @@ import '../styles/global.css';
     }
   }
 </style>
-
-<script>
-  // Apply theme immediately to prevent flash of wrong theme
-  const savedTheme = localStorage.getItem('theme');
-  
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  } else {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
-</script>
