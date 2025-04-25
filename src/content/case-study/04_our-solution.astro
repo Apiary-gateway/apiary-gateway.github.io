@@ -136,10 +136,16 @@ const dashboardCarouselItems = [
 
   <TextImageCarousel items={dashboardCarouselItems} autoPlay={true} interval={5000} title="Apiary Dashboard Walkthrough" />
 
+  <h3 id="the-life-cycle-of-a-request">Life Cycle of a Request</h3>
+  <p>The below diagram provides a visualization of the path of a request through Apiary:</p>
+  <Image src={images.lifeCycleOfARequest} alt="Life Cycle of a Request" caption="Life Cycle of a Request" />
+
   <h3 id="getting-started-with-apiary">Getting Started with Apiary</h3>
 
   <p>Users can get started with our Command Line Interface (CLI) tool. The CLI tool provides commands to automatically deploy (and destroy) Apiary infrastructure using AWS Cloud Development Kit (CDK).</p>
+<p>Once the user's infrastructure is deployed, they can navigate to the observability and management dashboard to configure their desired settings.
 
+  Once configured, the Apiary Software Development Kit (SDK) can be used to send client requests to the system.</p>
   <Image src={images.apiarySDK} alt="Apiary SDK" caption="Apiary SDK" />
 
 </section> 
