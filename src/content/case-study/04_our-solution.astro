@@ -1,6 +1,7 @@
 ---
 import Image from '../../components/Image.astro';
 import Carousel from '../../components/Carousel.astro';
+import TextImageCarousel from '../../components/TextImageCarousel.astro';
 
 const images = {
   apiaryComparisonChart: "/images/04-01-apiary-comparison-chart.png",
@@ -25,6 +26,57 @@ const logDetailsCarouselItems = [
   { image: images.logDetailsPart2, caption: "Log Details Part 2" },
   { image: images.routingHistorySimpleCacheHit, caption: "Model routing history displaying a simple cache hit." },
   { image: images.routingHistoryGuardrailHit, caption: "Model routing history displaying a guardrail hit." }
+];
+
+const dashboardCarouselItems = [
+  {
+    text: "The first page you'll see in the dashboard is the short-term logs view, which displays all of the requests and responses routed through Apiary in the past 5 days.",
+    image: images.shortTermLogs,
+  },
+  {
+    text: "You can then click on the hamburger icon in the upper-right and select 'Show Long Term Logs' to retrieve the full historical logs for your application.",
+    image: images.dropdownMenuFocusLongTermLogs,
+  },
+  {
+    text: "The long-term logs view shows the complete history of your application's requests and responses.",
+    image: images.longTermLogs,
+  },
+  {
+    text: "Apiary's routing behavior is controlled via a configuration object, which can be edited directly through the dashboard.",
+    image: images.dropdownMenuFocusGatewayConfig,
+  },
+  {
+    text: "The default configuration object is shown below, along with some notes on the configuration options. The dashboard provides syntax validation and helpful error messages to guide users through customizing the configuration object.",
+    image: images.manageConfigUI,
+  },
+  {
+    text: "Conditional routing based on custom, user-defined fields can be configured through the configuration object in the <code>availableMetadata</code> and <code>conditions</code> arrays.<br>In the below configuration, Apiary will look for a request header of \"x-user-type\", and if the value in that header is \"pro\", it will be routed to OpenAI's GPT-4 model 60% of the time, and Gemini's 1.5 Pro model 40% of the time.</br>",
+    image: images.apiaryConditionalGroups
+  },
+  {
+    text: "The default Apiary configuration includes some basic guardrails, which can be expanded upon or edited through the user interface.",
+    image: images.dropdownMenuFocusGuardrailsMenu,
+  },
+  {
+    text: "Apiary will check LLM responses, plus the context of the prompt, for semantic similarity to the configured guardrails. Any responses that fall above the configured threshold will be blocked.",
+    image: images.guardrailsExample,
+  },
+  {
+    text: "To see the exact settings for a given request, you can click on that request in the logs table and a details modal will open.",
+    image: images.logDetailsPart1,
+  },
+  {
+    text: "The remainder of the log details modal is shown below.",
+    image: images.logDetailsPart2,
+  },
+  {
+    text: "The routing history shows the exact route that a request took through the system, including any cache hits or guardrail checks that occurred.",
+    image: images.routingHistorySimpleCacheHit,
+  },
+  {
+    text: "When a guardrail is triggered, the routing history will show the specific guardrail that was hit.",
+    image: images.routingHistoryGuardrailHit,
+  }
 ];
 ---
 
@@ -82,56 +134,12 @@ const logDetailsCarouselItems = [
 
   <p>The Apiary user interface is designed to give developers full visibility of their LLM requests, as well as control over how the requests are routed. Here's a walkthrough of the key areas:</p>
 
-  <h4>Logs Overview</h4>
-
-  <p>The first page you'll see in the dashboard is the short-term logs view, which displays all of the requests and responses routed through Apiary in the past 5 days.</p>
-
-  <Image src={images.shortTermLogs} alt="Short Term Logs View" caption="Short Term Logs Dashboard"/>
-
-  <p>You can then click on the hamburger icon in the upper-right and select "Show Long Term Logs" to retrieve the full historical logs for your application.</p>
-
-  <Image src={images.dropdownMenuFocusLongTermLogs} alt="Show Long Term Logs Menu Option" caption="Show Long Term Logs Menu Option"/>
-  <Image src={images.longTermLogs} alt="Long Term Logs View" caption="Long Term Logs Dashboard" width="90%" height="auto"/>
-
-  <h4>Configuring Request Handling and Routing</h4>
-
-  <p>Apiary's routing behavior is controlled via a configuration object, which can be edited directly through the dashboard.</p>
-
-  <Image src={images.dropdownMenuFocusGatewayConfig} alt="Manage Config Object Menu" caption="Manage Config Object Menu"/>
-
-  <p>The default configuration object is shown below, along with some notes on the configuration options:</p>
-
-  <Image src={images.manageConfigUI} alt="Manage Config UI" caption="Manage Config UI"/>
-
-  <p>Conditional routing based on custom, user-defined fields can be configured through the configuration object in the <code>availableMetadata</code> and <code>conditions</code> arrays:</p>
-
-  <Image src={images.apiaryConditionalGroups} alt="Apiary Conditional Groups" caption="Apiary Conditional Groups"/>
-
-  <p>In the above configuration, Apiary will look for a request header of "x-user-type," and if the value in that header is "pro," it will be routed to OpenAI's GPT-4 model 60% of the time, and Gemini's 1.5 Pro model 40% of the time.</p>
-
-  <p>The dashboard provides syntax validation and helpful error messages to guide users through customizing the configuration object.</p>
-
-  <h4>Setting Guardrails</h4>
-
-  <p>The default Apiary configuration includes some basic guardrails, which can be expanded upon or edited through the user interface:</p>
-
-  <Image src={images.dropdownMenuFocusGuardrailsMenu} alt="Manage Guardrails Menu" caption="Manage Guardrails Menu"/>
-  <Image src={images.guardrailsExample} alt="Guardrails Example" caption="Guardrails Example"/>
-
-  <p>Apiary will check LLM responses, plus the context of the prompt, for semantic similarity to the configured guardrails. Any responses that fall above the configured threshold will be blocked. We provide a detailed discussion on guardrails and semantic similarity in the Building Apiary section of our case study.</p>
-
-  <h4>Log Details</h4>
-
-  <p>To see the exact settings for a given request, you can click on that request in the logs table and a details modal will open.</p>
-
-  <Carousel items={logDetailsCarouselItems} autoPlay={true} interval={5000} />
+  <TextImageCarousel items={dashboardCarouselItems} autoPlay={true} interval={5000} title="Apiary Dashboard Walkthrough" />
 
   <h3 id="getting-started-with-apiary">Getting Started with Apiary</h3>
 
-  <p>Users can get started with our Command Line Interface (CLI) tool. The CLI tool provides commands to automatically deploy (and destroy) Apiary infrastructure using AWS Cloud Development Kit (CDK). Once the user's infrastructure is deployed, they can navigate to the observability and management dashboard to configure their desired settings.</p>
+  <p>Users can get started with our Command Line Interface (CLI) tool. The CLI tool provides commands to automatically deploy (and destroy) Apiary infrastructure using AWS Cloud Development Kit (CDK).</p>
 
-  <p>Once configured, the Apiary Software Development Kit (SDK) can be used to send client requests to the system.</p>
-
-  <Image src={images.apiarySDK} alt="Apiary SDK" caption="Example usage of the Apiary TypeScript SDK"/>
+  <Image src={images.apiarySDK} alt="Apiary SDK" caption="Apiary SDK" />
 
 </section> 
