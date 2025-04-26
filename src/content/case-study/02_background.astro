@@ -48,11 +48,11 @@ const images = {
 
     <p>LLMs vary widely in price, performance, and behavior. A developer might route high-priority or complex tasks to a more powerful (and more expensive) model, while using smaller, open-source models for simpler or lower-stakes queries.</p>
 
-    <p>For instance, Anthropic's Claude might be used for its natural, human-like writing style, while an open-source model may suffice for straightforward classification tasks. A chatbot for a car dealership might use a cheap, fast model to answer "What are your store hours?" and a more advanced model for "What would my monthly payment be if I finance this car over 4 years with $4,500 down?"</p>
+    <p>For instance, Anthropic's Claude might be used for its natural, human-like writing style, while an open-source model may suffice for straightforward classification tasks. A chatbot for a car dealership might use a cheap, fast model to answer "What are your weekend hours?" and a more advanced model for "What would my monthly payment be if I finance this car over 4 years with $4,500 down?"</p>
 
     <h4>Reliability and Fallbacks</h4>
 
-    <p>LLMs often fall short of enterprise reliability standards (e.g., "five nines" or 99.999% uptime). GPT-4 and Claude models, for example, typically offer only 99.2–99.7% availability <sup><a href="#footnote-1">1</a>, <a href="#footnote-2">2</a></sup>. In high-availability applications, developers must implement fallback strategies using alternative models to ensure uninterrupted service.</p>
+    <p>LLMs often fall short of enterprise reliability standards (e.g., "five nines" or 99.999% uptime). OpenAI and Anthropic models, for example, typically offer only 99.2–99.7% availability <sup><a href="#footnote-1">1</a>, <a href="#footnote-2">2</a></sup>. In high-availability applications, developers must implement fallback strategies using alternative models to ensure uninterrupted service.</p>
 
     <h4>Performance Evaluation and Testing</h4>
 
@@ -82,7 +82,7 @@ const images = {
 
     <p>These challenges aren't going away. If anything, they're growing as LLMs are integrated into more and more applications. Rather than continuing to patch and duplicate logic across every integration, developers need a centralized layer to manage and abstract LLM interactions. This is where a <strong>model gateway</strong> comes in - a centralized layer that abstracts away the mess of LLM-integrated development.</p>
 
-    <p>A model gateway stands between your application and one or more foundation model APIs. It centralizes routing, standardizes requests and response formats, manages credentials, tracks usage and cost, and can apply logic like retries, caching, and guardrails. To give an idea of what the interface for a model gateway can look like, the below image show's Cloudflare AI Gateway's dashboard. Each request is routed through the gateway, where it can be tracked and modified according to configured rules.</p>
+    <p>A model gateway acts as an intermediary between your application and one or more foundation model APIs. It centralizes key responsibilities: routing requests, standardizing request and response formats, managing credentials, tracking usage and cost, and applying operational logic such as retries, caching, and guardrails. To illustrate, the image below shows Cloudflare AI Gateway's dashboard. Each LLM request is routed through the gateway, where it can be tracked and modified according to configured rules.</p>
 
     <Image src={images.cloudflareAiGatewayDashboard} alt="Cloudflare AI Gateway Dashboard" caption="Cloudflare AI Gateway Dashboard"/>
 </section>

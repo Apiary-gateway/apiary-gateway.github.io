@@ -17,22 +17,24 @@ const images = {
     <h4>The Challenge</h4>
     <p>Our first major decision was selecting an initial architecture that would serve as a solid foundation for Apiary. We needed a solution that would present client applications with a simple, secure, and consistent interface - in the quickly evolving LLM landscape, the architecture should allow for updates on the backend without changes in how client applications interact with Apiary. The architecture needed to provide flexibility, enabling us to easily integrate features like authentication, dynamic routing, and observability. Additionally, we wanted a scalable solution that would accommodate applications with variable workflows.</p>
 
-    <div class="info-box">
-        <h4>Technical Overview</h4>
-        <p>API Gateways serve as centralized entry points for client applications to access backend services or APIs. Clients send requests to the API Gateway, which routes incoming requests to appropriate backend services and handles common concerns such as authentication, rate limiting, and request/response transformation. Backend services can be adjusted without changing how client applications access them through the API Gateway.</p>
-
-        <p>API Gateways can integrate with various backend architectures, including:</p>
-        <ul>
-            <li><strong>Traditional servers (e.g., EC2)</strong>: These offer complete control and flexibility, but require upfront provisioning, manual scaling to accommodate variable traffic, ongoing management, and fixed costs even during periods of low demand.</li>
-            <li><strong>Container-based solutions (e.g., ECS/EKS)</strong>: Containers provide greater portability and scalability compared to traditional servers. However, they also introduce deployment complexity, management overhead, and typically higher baseline costs.</li>
-            <li><strong>Serverless computing</strong>: In serverless computing models, cloud providers dynamically manage the allocation and provisioning of servers. This means that serverless architectures automatically scale based on demand and don't require upfront provisioning.</li>
-        </ul>
-    </div>
-
     <h4>Our Implementation Choices</h4>
     <p>We chose Amazon API Gateway paired with AWS Lambda as the foundational components for Apiary. API Gateway's built-in capabilities - such as acting as a "front door" for backend APIs and centralizing management of key functions like authentication and rate limiting - made it a natural choice.</p>
 
     <p>Behind this gateway, AWS Lambda handles dynamic workloads by running functions that execute only when triggered by incoming requests. AWS Lambda's pay-per-use pricing model means we incur costs only for actual usage, making it efficient for periods of low traffic. Additionally, Lambda's automatic scaling ensures that our system can adapt to sudden spikes in demand without manual intervention.</p>
+
+    <p>For additional context, we'll provide a technical overview of API Gateways and their possible integration options before exploring the tradeoffs and considerations of our implementation.</p>
+
+    <div class="info-box">
+      <h4>Technical Overview</h4>
+      <p><strong>API Gateways</strong> act as centralized entry points for client applications to access backend services or APIs. They route incoming client requests to the appropriate backend services and handle common concerns such as authentication, rate limiting, and request/response transformation. Because clients interact only with the API Gateway, backend services can be updated or even replaced without requiring changes on the client side.</p>
+
+      <p>API Gateways can integrate with various backend architectures, including:</p>
+      <ul>
+          <li><strong>Traditional servers (e.g., EC2)</strong>: These offer complete control and flexibility, but require upfront provisioning, manual scaling to accommodate variable traffic, ongoing management, and fixed costs even during periods of low demand.</li>
+          <li><strong>Container-based solutions (e.g., ECS/EKS)</strong>: Containers provide greater portability and scalability compared to traditional servers. However, they also introduce deployment complexity, management overhead, and typically higher baseline costs.</li>
+          <li><strong>Serverless computing (e.g., Lambda)</strong>: In serverless computing models, cloud providers dynamically manage the allocation and provisioning of servers. This means that serverless architectures automatically scale based on demand and don't require upfront provisioning.</li>
+      </ul>
+    </div>
 
     <h4>Tradeoffs and Considerations</h4>
     <p>Adopting a serverless architecture did involve certain tradeoffs. AWS Lambda has inherent limitations, notably the "cold start" latency - a brief initial delay (around 200ms) encountered when invoking a Lambda function after a period of inactivity. However, after this initial invocation, subsequent requests benefit from a "warm" Lambda instance, significantly reducing latency. Another limitation is Lambda's maximum execution duration of 15 minutes per request. For our typical LLM interactions, which generally complete within seconds, this rarely poses any practical issues.</p>
@@ -77,7 +79,7 @@ const images = {
 
     <p>This approach maintains security for provider credentials while providing a simple, unified authentication mechanism for client applications.</p>
 
-    <h4>Alternatives Approaches and Tradeoffs</h4>
+    <h4>Alternative Approaches and Tradeoffs</h4>
     <p>It's not uncommon for teams to store API keys in a <code>.env</code> file, but we didn't consider this approach due to security risks and impracticality for production environments or team-based workflows. Another alternative was using an external tool like HashiCorp Vault, but that would introduce operational complexity and management overhead we didn't need. Given that we were already in the AWS ecosystem, Secrets Manager was a natural fit.</p>
 
     <h3 id="managing-conversation-history">Managing Conversation History</h3>
@@ -113,7 +115,7 @@ const images = {
         <li>Request-level provider and model specification</li>
         <li>Configuration-level defaults</li>
         <li>Conditional routing based on request metadata</li>
-        <li>Traffic distribution within condition groups</li>
+        <li>Traffic distribution within condition groups (load balancing)</li>
         <li>Multiple layers of fallback mechanisms</li>
     </ul>
 
@@ -147,35 +149,37 @@ const images = {
     <h3 id="caching">Caching</h3>
 
     <h4>The Challenge</h4>
-    <p>As discussed, common developer concerns when working with LLMs include cost and high latency, especially compared to traditional API calls. Response times can vary significantly depending on the model, the length of the input prompt and generated output (measured in tokens), and the current load on the provider's infrastructure <sup><a href="#footnote-5">5</a></sup>. Tracked response times increase when using more powerful models, and may increase even further when requesting longer outputs.</p>
+    <p>As discussed, common developer concerns when working with LLMs include cost and high latency, especially compared to traditional API calls. Response times can vary significantly depending on the model, the length of the input prompt and generated output (measured in tokens), and the current load on the provider's infrastructure <sup><a href="#footnote-5">5</a></sup>. Tracked response times increase when using more powerful models<sup><a href="#footnote-4">4</a></sup>, and may increase even further when requesting longer outputs.</p>
 
     <p>LLM pricing also varies based on the provider and model, but is generally charged based on tokens used. As of this writing, OpenAI's GPT-4.1 model - which it touts as a "model for everyday tasks" - costs $2.00 per million input tokens and $8.00 per million output tokens. o1-pro, one of OpenAI's most advanced models, costs $150.00 per million input tokens and $600.00 per million output tokens. Costs can add up even when using a cheaper model, especially for high traffic applications.</p>
-
-    <div class="info-box">
-        <h4>Technical Overview</h4>
-        <p>In a caching system, responses to prior requests can be reused, rather than calling the LLM again. In <strong>simple caching</strong>, a cached response is only returned if the request matches the previous one exactly. For example, the queries "How do bees make honey?" and "How do bees produce honey?" wouldn't be recognized by a simple cache as equivalent requests, even though it might be reasonable to return the same response in this case.</p>
-
-        <p>Despite the variability of language and relatively low likelihood of identical phrasing between requests, LLM-integrated applications can benefit greatly from a simple cache. For instance, applications with suggested pre-defined prompts, where the exact same prompt might be sent repeatedly, would result in a high number of simple cache hits. A simple cache can be particularly valuable during development, when a cached response may be preferred to avoid the token usage and latency of an LLM call.</p>
-
-        <p>In contrast, <strong>semantic caches</strong> are able to recognize the meaning of requests - so that queries like "How do bees make honey?" and "How do bees produce honey?" are identified as semantically equivalent and result in a cache hit.</p>
-
-        <p>Semantic caching uses <strong>vector embeddings</strong>, which are arrays of hundreds or thousands of numbers that represent the characteristics of a piece of data, like a sentence or a paragraph. <strong>Embedding models</strong> have been trained to convert inputs like sentences into vector embedding outputs representing the inputs' features. Embeddings can be compared using <strong>cosine similarity</strong>, a calculation that measures how similar two embeddings are to each other. The higher the cosine similarity, the more similar the embeddings. Vector embeddings can be stored in a category of databases called <strong>vector databases</strong>, which are optimized for storing and searching high-dimensional vector embeddings.</p>
-
-        <Image src={images.embeddings} alt="Embeddings" caption="Embeddings"/>
-    </div>
 
     <h4>Our Implementation</h4>
     <p>To help mitigate the latency and costs of LLM calls, Apiary implements both simple and semantic caching. Users have the option to enable one, both, or neither of these caches, depending on their needs.</p>
 
+    <p>Before diving into our implementation details, we’ll provide a technical overview of simple and semantic caching systems to ground the discussion.</p>
+
+    <div class="info-box">
+      <h4>Technical Overview</h4>
+      <p>In a caching system, responses to prior requests can be reused, rather than calling the LLM again. In <strong>simple caching</strong>, a cached response is only returned if the request matches the previous one exactly. For example, the queries "How do bees make honey?" and "How do bees produce honey?" wouldn't be recognized by a simple cache as equivalent requests, even though it might be reasonable to return the same response in this case.</p>
+
+      <p>Despite the variability of language and relatively low likelihood of identical phrasing between requests, LLM-integrated applications can benefit greatly from a simple cache. For instance, applications with suggested pre-defined prompts, where the exact same prompt might be sent repeatedly, would result in a high number of simple cache hits. A simple cache can be particularly valuable during development, when a cached response may be preferred to avoid the token usage and latency of an LLM call.</p>
+
+      <p>In contrast, <strong>semantic caches</strong> are able to recognize the meaning of requests - so that queries like "How do bees make honey?" and "How do bees produce honey?" are identified as semantically equivalent and result in a cache hit.</p>
+
+      <p>Semantic caching uses <strong>vector embeddings</strong>, which are arrays of hundreds or thousands of numbers that represent the characteristics of a piece of data, like a sentence or a paragraph. <strong>Embedding models</strong> have been trained to convert inputs like sentences into vector embedding outputs representing the inputs' features. Embeddings can be compared using <strong>cosine similarity</strong>, a calculation that measures how similar two embeddings are to each other. The higher the cosine similarity, the more similar the embeddings. Vector embeddings can be stored in a category of databases called <strong>vector databases</strong>, which are optimized for storing and searching high-dimensional vector embeddings.</p>
+
+      <Image src={images.embeddings} alt="Vector embeddings" />
+    </div>
+
     <h5>Simple cache</h5>
-    <p>If both caches are enabled, Apiary checks the simple cache first. Due to its simpler nature, the simple cache is able to return a response faster than the semantic cache.</p>
+    <p>If both simple and semantic caches are enabled, Apiary checks the simple cache first. Due to its simpler nature, the simple cache is able to return a response faster than the semantic cache.</p>
 
     <p>Apiary's simple cache uses DynamoDB, which we chose for its simplicity, single-digit millisecond response times, and easy integration with other AWS services. Requests can be cached globally or per user by including a <code>userId</code> in the request. Each entry's "sort key" is created by combining the LLM provider and model used, with the text of the user request. This accommodates cases where developers want a response to be provided by a specific provider and model due to that model's strengths in some area.</p>
 
     <p>Cache items are automatically deleted using DynamoDB's built-in time-to-live (TTL) functionality. Developers can specify a TTL in seconds that works best for them.</p>
 
     <h5>Semantic cache</h5>
-    <p>If no match is found in the simple cache, Apiary checks the semantic cache next. The semantic caching system follows this process:</p>
+    <p>If no match is found in the simple cache, Apiary checks the semantic cache (if enabled) next. The semantic caching system follows this process:</p>
     <ol>
         <li>A vector embedding for the request is generated.</li>
         <li>The embedding is compared against previously cached embeddings using cosine similarity.</li>
@@ -286,15 +290,15 @@ const images = {
     <p><strong>The Challenge</strong></p>
     <p>Long-term log storage presents distinct challenges, particularly around efficiently storing and querying large volumes of historical data. Unlike short-term logs, the priority shifts toward facilitating aggregate queries (e.g., calculating averages or grouping data by provider) rather than rapid individual record retrieval. Therefore, our primary considerations here were query efficiency and cost-effective storage.</p>
 
-    <div class="info-box">
-        <h4>Technical Overview</h4>
-        <p>Apache Parquet is a columnar storage format that stores data by columns rather than rows, offering significant compression advantages. Columnar compression reduces the required storage space and significantly accelerates analytical queries since irrelevant columns can be skipped during queries <sup><a href="#footnote-6">6</a></sup>.</p>
-
-        <p>AWS Athena, a serverless query service, enables querying data stored in Amazon S3 using standard SQL. When paired with parquet format, Athena efficiently reads only the required columns. Additionally, parquet files in S3 can be partitioned by specific columns, further optimizing queries by ensuring only necessary partitions are scanned. Bulk parquet data can be split into separate files, and Athena can run queries in parallel on those files.</p>
-    </div>
-
     <p><strong>Our Implementation</strong></p>
     <p>Apiary stores its long-term log data as Apache Parquet files within Amazon S3, leveraging Athena to execute queries. This approach optimizes both storage costs and query performance due to Parquet's compression and the columnar design. Athena provides the option to run optimized aggregate queries on the data through familiar SQL statements.</p>
+
+    <div class="info-box">
+      <h4>Technical Overview</h4>
+      <p><strong>Apache Parquet</strong> is a columnar storage format that stores data by columns rather than rows, offering significant compression advantages. Columnar compression reduces the required storage space and significantly accelerates analytical queries since irrelevant columns can be skipped during queries <sup><a href="#footnote-6">6</a></sup>.</p>
+
+      <p><strong>AWS Athena</strong>, a serverless query service, enables querying data stored in Amazon S3 using standard SQL. When paired with parquet format, Athena efficiently reads only the required columns. Additionally, parquet files in S3 can be partitioned by specific columns, further optimizing queries by ensuring only necessary partitions are scanned. Bulk parquet data can be split into separate files, and Athena can run queries in parallel on those files.</p>
+    </div>
 
     <p><strong>Alternative Approaches and Tradeoffs</strong></p>
     <p>An alternative that we considered was storing logs in JSON format. JSON's advantages include human readability, easy interoperability with multiple platforms and tools, and suitability for row-based querying (ideal for accessing detailed individual request data). However, JSON lacks Parquet's storage efficiency and optimized query capabilities for large-scale analytics. Given our priorities of aggregate analysis and the potential scale of log storage, Parquet's compression and aggregate query advantages were decisive factors in choosing it over JSON.</p>
@@ -309,5 +313,5 @@ const images = {
 
     <p>The dashboard also serves as a management hub where users can configure routing logic and guardrails. We considered different options for where to implement this "management hub" - for example by having users pass a configuration object in the SDK, or via CLI commands. Ultimately we felt that the dashboard UI was the most user-friendly option, where we could provide the most intuitive editing interface along with guidance on entering a valid configuration object.</p>
 
-    <Image src={images.apiaryArchitecture} alt="Apiary Architecture" caption="Apiary Architecture"/>
+    <Image src={images.apiaryArchitecture} alt="Apiary Architecture (*caches and guardrails can be disabled)" caption="Apiary Architecture (*caches and guardrails can be disabled)"/>
 </section>

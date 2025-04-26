@@ -50,7 +50,7 @@ const dashboardCarouselItems = [
     image: images.manageConfigUI,
   },
   {
-    text: "Conditional routing based on custom, user-defined fields can be configured through the configuration object in the <code>availableMetadata</code> and <code>conditions</code> arrays.<br>In the below configuration, Apiary will look for a request header of \"x-user-type\", and if the value in that header is \"pro\", it will be routed to OpenAI's GPT-4 model 60% of the time, and Gemini's 1.5 Pro model 40% of the time.</br>",
+    text: "Conditional routing based on custom, user-defined fields can be configured through the configuration object in the <code>availableMetadata</code> and <code>conditions</code> arrays.<br>In the below configuration, Apiary will look for a request header of \"x-user-type\", and if the value in that header is \"pro\", the request will be routed to OpenAI's GPT-4 model 60% of the time, and Gemini's 1.5 Pro model 40% of the time.</br>",
     image: images.apiaryConditionalGroups
   },
   {
@@ -87,7 +87,7 @@ const dashboardCarouselItems = [
 
   <h3 id="how-apiary-compares-to-alternatives">How Apiary Compares to Alternatives</h3>
 
-  <p>In the table below, we've selected one open-source tool (Portkey) and one hosted solution (Cloudflare AI) to compare alongside Apiary.</p>
+  <p>In the table below, we've selected one open-source tool (Portkey) and one hosted solution (Cloudflare AI Gateway) to compare alongside Apiary.</p>
 
   <Image src={images.apiaryComparisonChart} alt="Apiary Comparison Chart" caption="Apiary Comparison Chart"/>
 
@@ -121,7 +121,7 @@ const dashboardCarouselItems = [
 
   <h3 id="who-apiary-is-for">Who Apiary Is For</h3>
 
-  <p>Apiary is built for small to medium-sized development teams working on AI-integrated applications where reliability, cost-efficiency, configurability, and observability are crucial. It provides a centralized point for managing aspects like API keys and guardrails, minimizing the coordination needed between different systems and team members. Built-in observability allows developers to track the life cycle of a request through the system, and monitor where errors may be occurring. Features like conditional routing, fallbacks, and caching help to optimize application performance and costs. Each of these features is configurable, allowing developers to optimize Apiary for their specific applications' needs.</p>
+  <p>Apiary is built for small to medium-sized development teams working on AI-integrated applications where reliability, cost-efficiency, configurability, and observability are crucial. It provides a centralized point for managing aspects like API keys and guardrails, minimizing the coordination needed between different systems and team members. Built-in observability allows developers to monitor performance and track the life cycle of a request through the system. Features like conditional routing, fallbacks, and caching help to optimize application performance and costs. Each of these features is configurable, allowing developers to optimize Apiary for their specific applications' needs.</p>
 
   <h3 id="a-walkthrough-of-the-apiary-dashboard">A Walkthrough of the Apiary Dashboard</h3>
 
@@ -146,6 +146,6 @@ const dashboardCarouselItems = [
 <p>Once the user's infrastructure is deployed, they can navigate to the observability and management dashboard to configure their desired settings.
 
   Once configured, the Apiary Software Development Kit (SDK) can be used to send client requests to the system.</p>
-  <Image src={images.apiarySDK} alt="Apiary SDK" caption="Apiary SDK" />
+  <Image src={images.apiarySDK} alt="Example usage of the Apiary TypeScript SDK" caption="Example usage of the Apiary TypeScript SDK" />
 
 </section> 
