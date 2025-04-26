@@ -17,7 +17,6 @@ const currentPath = Astro.url.pathname;
     </div>
     <div class="nav-links">
       <a href="/case-study" class={currentPath.startsWith('/case-study') ? 'active' : ''}>Case Study</a>
-      <a href="/docs" class={currentPath.startsWith('/docs') ? 'active' : ''}>Docs</a>
       <a href="/#team" class={currentPath === '/#team' ? 'active' : ''}>Team</a>
       <a href={organizationURL} target="_blank" class="external-link">
         Github
