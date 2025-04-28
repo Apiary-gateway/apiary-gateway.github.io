@@ -37,7 +37,7 @@ const images = {
     </div>
 
     <h4>Tradeoffs and Considerations</h4>
-    <p>Adopting a serverless architecture did involve certain tradeoffs. AWS Lambda has inherent limitations, notably the "cold start" latency - a brief initial delay (around 200ms) encountered when invoking a Lambda function after a period of inactivity. However, after this initial invocation, subsequent requests benefit from a "warm" Lambda instance, significantly reducing latency. Another limitation is Lambda's maximum execution duration of 15 minutes per request. For our typical LLM interactions, which generally complete within seconds, this rarely poses any practical issues.</p>
+    <p>AWS Lambda has inherent limitations, notably the "cold start" latency - a brief initial delay (around 200ms) encountered when invoking a Lambda function after a period of inactivity. However, after this initial invocation, subsequent requests benefit from a "warm" Lambda instance, significantly reducing latency. Another limitation is Lambda's maximum execution duration of 15 minutes per request. For our typical LLM interactions, which generally complete within seconds, this rarely poses any practical issues.</p>
 
     <p>Ultimately, choosing a serverless foundation allowed us to prioritize our development efforts on Apiary's unique capabilities rather than infrastructure management, setting a flexible and efficient base for ongoing work.</p>
 
@@ -46,10 +46,10 @@ const images = {
     <h4>The Challenge</h4>
     <p>As we've discussed, each LLM provider implements their API differently. The variations in parameter naming, request structure, and response formats must be handled in order to build a unified API. The transformation logic can become complex, but more importantly, as providers update their APIs, the logic in the model gateway must be updated as well.</p>
 
-    <p>There are lots of opportunities for small discrepancies between the providers. For instance, to access the text response from OpenAI, you need to access the <code>content</code> property of the <code>message</code> object of the first element of the <code>choices</code> array in the response object. For Anthropic's Claude models, you need to access the <code>text</code> property in the first element of the <code>content</code> array in the response object. As another example, with OpenAI, if you want to include a developer prompt, you include the <code>"developer"</code> role in the input messages array sent in the request. To do the same with Claude, you must use the top-level <code>system</code> parameter — there is no <code>"system"</code> role for input messages in the Messages API. If you include a <code>"system"</code> role in your input messages, an error is thrown.</p>
+    <p>For instance, to access the text response from OpenAI, you need to access the <code>content</code> property of the <code>message</code> object of the first element of the <code>choices</code> array in the response object. For Anthropic's Claude models, you need to access the <code>text</code> property in the first element of the <code>content</code> array in the response object. As another example, with OpenAI, if you want to include a developer prompt, you include the <code>"developer"</code> role in the input messages array sent in the request. To do the same with Claude, you must use the top-level <code>system</code> parameter — there is no <code>"system"</code> role for input messages in the Messages API. If you include a <code>"system"</code> role in your input messages, an error is thrown.</p>
 
     <h4>Our Implementation</h4>
-    <p>After evaluating various approaches, we chose to wrap an <strong>established library</strong>. We built our core transformation logic around TokenJS, an open-source library that normalizes interactions with LLM providers.</p>
+    <p>After evaluating various approaches, we chose to wrap an established library. We built our core transformation logic around TokenJS, an open-source library that normalizes interactions with LLM providers.</p>
 
     <p>Wrapping a library offered several advantages:</p>
     <ul>

@@ -93,6 +93,8 @@ const currentPath = Astro.url.pathname;
     height: 72px;
     width: auto;
     transition: height 0.3s ease;
+    box-shadow: 0 0 1px var(--primary-color),
+                0 0 2px var(--primary-color);
   }
 
   .brand-name a {
@@ -328,11 +330,11 @@ const currentPath = Astro.url.pathname;
   const updateThemeColors = (theme) => {
     const root = document.documentElement;
     if (theme === 'dark') {
-      root.style.setProperty('--navbar-bg', '#1a1a1a');
+      root.style.setProperty('--navbar-bg', '#232222');
       root.style.setProperty('--navbar-border', '#2d2d2d');
       root.style.setProperty('--text-primary', '#ffffff');
       root.style.setProperty('--primary-color', '#cd9e05');
-      root.style.setProperty('--color-background', '#1a1a1a');
+      root.style.setProperty('--color-background', '#232222');
       root.style.setProperty('--color-background-alt', '#242424');
       root.style.setProperty('--color-text', '#ffffff');
       root.style.setProperty('--color-border', '#404040');
