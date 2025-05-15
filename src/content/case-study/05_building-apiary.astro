@@ -92,7 +92,7 @@ const images = {
     <p>Managing threads effectively requires persistent storage, standardization across providers, and strategies for handling long-running conversations.</p>
 
     <h4>Our Implementation Choices</h4>
-    <p>When a user sends a prompt to Apiary, they have the option to include a <code>threadID</code> or let the system generate one automatically based on the current timestamp. This <code>threadID</code> acts as a key for the conversation, allowing us to link each message in a thread together.</p>
+    <p>When a user sends a prompt to Apiary, they can either provide a <code>threadID</code> or let the system automatically generate one using a UUID. This <code>threadID</code> acts as a key for the conversation, allowing us to link each message in a thread together.</p>
 
     <p>Every query and its corresponding response is stored in a DynamoDB table. Standardization via our wrapped library ensures the conversation has been normalized prior to being saved. When a new message arrives with a <code>threadID</code>, Apiary retrieves the full message history associated with that thread. This history is then passed along with the new prompt to the LLM, giving it the full conversational context.</p>
         
