@@ -379,4 +379,11 @@ const currentPath = Astro.url.pathname;
   closeBtn.addEventListener('click', () => {
     mobileMenu.classList.remove('active');
   });
+
+  // Close mobile menu when any link is clicked
+  document.querySelectorAll('.mobile-menu-content a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+    });
+  });
 </script>
